@@ -1,9 +1,30 @@
+// Show/hide grid w/ Shift + G
+$(document). keydown (function (e) {
+	if (e. shiftKey && e. key === "G") {
+		$(".grid-wrap").toggleClass("hide");
+	}
+});
+
+// Initialize Lenis
+const lenis = new Lenis();
+
+// Listen for the scroll event and log the event data
+lenis.on('scroll', (e) => {
+  console.log(e);
+});
+
+// Use requestAnimationFrame to continuously update the scroll
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
+
+// Home hero scroll track
 $(".scroll-track.is-home_hero").each(function () {
     let triggerElement = $(this);
-    let textElement = $(".home-hero-content-wrapper");
     let videoElement = $(".hero-video-wrapper");
-    let imageWrapper = $(".home-hero_image-wrapper");
-    let imageElements = $(".home-hero_image"); // Targets all images inside the wrapper
     let titleLine1 = $(".title-h_scroll.is-1");
     let titleLine2 = $(".title-h_scroll.is-2");
     let titleLine3 = $(".title-h_scroll.is-3");
@@ -17,19 +38,14 @@ $(".scroll-track.is-home_hero").each(function () {
       },
     });
 
-    // Animate text opacity and blur
-    tl.to(textElement, { opacity: 0, duration: 0.25 });
-
     // Animate title lines in parallel
     tl.to(titleLine1, { x: "-10%", duration: 1 }, "<");
     tl.to(titleLine2, { x: "10%", duration: 1 }, "<");
     tl.to(titleLine3, { x: "-10%", duration: 1 }, "<");
 
     // Animate video dimensions in sync with previous animations
-    tl.to(videoElement, { width: "33.3333333333vh", height: "50vh", duration: 0.75 }, "<");
+    tl.to(videoElement, { scale: "0.8", duration: 1 }, "<");
 
-    // Animate image wrapper dimensions in sync
-    tl.to(imageWrapper, { height: "50vh", width: "33.3333333333vh", duration: 0.75 }, "<");
 });
 
 
@@ -67,33 +83,109 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
 });
 
 
-function animateFourImagesOnScroll() {
-    // Select the scroll track and all images
-    const scrollTrack = document.querySelector('.scroll-track.is-home_hero');
-    const images = document.querySelectorAll('.image-array');
+// Navigation BG Gradient Fade In
+$(".scroll-track.is-home_hero").each(function (index) {
+  let triggerElement = $(this);
+  let targetElement = $(".navigation-bg");
 
-    // Set all images to absolute positioning
-    images.forEach((image, index) => {
-      gsap.set(image, { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: index === 0 ? 1 : 0 });
-    });
+  let tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: triggerElement,
+      // trigger element - viewport
+      start: "40% top",
+      end: "bottom bottom",
+      scrub: 1,
+    },
+  });
+  tl.to(targetElement, {
+    opacity: "100%",
+    duration: 1,
+  });
+});
 
-    // Animate each of the 4 images to fade in/out at 25% intervals
-    images.forEach((image, index) => {
-        gsap.to(image, {
-            opacity: 1,
-            duration: 1, // Transition duration for fade in/out
-            scrollTrigger: {
-                trigger: scrollTrack,
-                start: `${index * 15}% top`,   // Each image starts at a 25% scroll interval
-                end: `${(index + 1) * 15}% bottom`, // Ends at the next 25% interval
-                scrub: true,
-                toggleActions: "play none none reverse",
+//Loader Start
+// Add the "hide" class to the cursor dot before the timeline starts
+$(".cursor_dot").addClass("hide");
+
+const loaderTimeline = gsap.timeline();
+
+loaderTimeline.fromTo(
+  ".loader_text",
+  {
+    y: "100%"
+  },
+  {
+    y: "0%",
+    duration: 0.5,
+    ease: 'Sine.easeOut'
+  }
+);
+
+loaderTimeline.fromTo(
+  ".loader_background",
+  {
+    y: "0vh"
+  },
+  {
+    y: "-100vh",
+    duration: 0.6,
+    ease: 'Sine.easeOut',
+    onComplete: () => {
+      gsap.set(".loader", { display: "none" });
+      // Remove the "hide" class from the cursor dot when the timeline completes
+      $(".cursor_dot").removeClass("hide");
+    }
+  },
+  "+=1"  // Offset the start time to synchronize with the previous animation
+);
+  
+loaderTimeline.to(
+  ".loader_text",
+  {
+    y: "-100%",
+    ease: 'Sine.easeOut',
+    duration: 0.5,
+  },
+  "-=0.8"  // Offset the start time to synchronize with the previous animation
+);
+
+// Code that runs on pageload
+  
+loaderTimeline.play();
+
+// Code that runs on click of a link
+$(document).ready(function () {
+  $("a").on("click", function (e) {
+    if (
+    	$(this).prop("hostname") === window.location.host &&
+      $(this).attr("href").indexOf("#") === -1 &&
+      $(this).attr("target") !== "_blank") {
+        e.preventDefault();
+        let destination = $(this).attr("href");
+        gsap.set(".loader", { display: "block" });
+        gsap.fromTo(
+          ".loader_background",
+          {
+            y: "100vh"
+          },
+          {
+            y: "0vh",
+            duration: 0.6,
+            ease: 'Sine.easeOut',
+            onComplete: () => {
+              window.location = destination;
             }
-        });
-    });
-}
-
-// Call the function to start the animation
-animateFourImagesOnScroll();
+          }
+        );
+    }
+  });
+  
+  // On click of the back button
+  window.onpageshow = function(event){
+  	if (event.persisted) {
+    	window.location.reload();
+    }
+  }
+});
 
 
