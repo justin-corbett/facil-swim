@@ -106,89 +106,283 @@ $(".scroll-track.is-home_hero").each(function (index) {
   });
 });
 
-//Loader Start
-// Add the "hide" class to the cursor dot before the timeline starts
-$(".cursor_dot").addClass("hide");
+// Loader And Page Transition Start
 
-const loaderTimeline = gsap.timeline();
+// GSAP timeline function for pageload
+function loaderOnPageLoad() {
+ 
+  // Create a GSAP timeline
+  let tl = gsap.timeline();
 
-loaderTimeline.fromTo(
-  ".loader_text",
-  {
-    y: "100%"
-  },
-  {
-    y: "0%",
-    duration: 0.5,
-    ease: 'Sine.easeOut'
-  }
-);
+   // Stops flicker on homepage
+   gsap.set(".section-home-services", { display: "none" });
 
-loaderTimeline.fromTo(
-  ".loader_background",
-  {
-    y: "0vh"
-  },
-  {
-    y: "-100vh",
-    duration: 0.6,
-    ease: 'Sine.easeOut',
-    onComplete: () => {
-      gsap.set(".loader", { display: "none" });
-      // Remove the "hide" class from the cursor dot when the timeline completes
-      $(".cursor_dot").removeClass("hide");
-    }
-  },
-  "+=1"  // Offset the start time to synchronize with the previous animation
-);
-  
-loaderTimeline.to(
-  ".loader_text",
-  {
-    y: "-100%",
-    ease: 'Sine.easeOut',
-    duration: 0.5,
-  },
-  "-=0.8"  // Offset the start time to synchronize with the previous animation
-);
 
-// Code that runs on pageload
-  
-loaderTimeline.play();
-
-// Code that runs on click of a link
-$(document).ready(function () {
-  $("a").on("click", function (e) {
-    if (
-    	$(this).prop("hostname") === window.location.host &&
-      $(this).attr("href").indexOf("#") === -1 &&
-      $(this).attr("target") !== "_blank") {
-        e.preventDefault();
-        let destination = $(this).attr("href");
-        gsap.set(".loader", { display: "block" });
-        gsap.fromTo(
-          ".loader_background",
-          {
-            y: "100vh"
-          },
-          {
-            y: "0vh",
-            duration: 0.6,
-            ease: 'Sine.easeOut',
-            onComplete: () => {
-              window.location = destination;
-            }
+  // Add animations to the timeline
+  tl.to(".logo-loader", {
+      y: "0%",
+      duration: 0.4,
+      delay: 0.2,
+      ease: 'power1.out',
+      onComplete: () => {
+          lenis.scrollTo('#top', {
+              onComplete: () => {
+                lenis.stop(); // Stops the scroll animation
+              }
+            });
+      }
+  }, "<+0.3")
+    
+    .to(".loader_background-gradient-1", {
+      y: "-100%",
+      duration: 1.5,
+      delay: 0.8,
+      ease: 'power2.out',
+    })
+    .to(".loader_background-gradient-2", {
+      y: "-100%",
+      duration: 1.5,
+      delay: 0,
+      ease: 'power2.out',
+    }, "<+0.2")
+    .to(".loader_background-gradient-3", {
+      y: "-100%",
+      duration: 1.5,
+      delay: 0,
+      ease: 'power2.out',
+    }, "<+0.2")
+    .to(".loader_background-gradient-4", {
+      y: "-100%",
+      duration: 1.5,
+      delay: 0,
+      ease: 'power2.out',
+    }, "<+0.2")
+    .to(".loader_background", {
+      y: "-100%",
+      duration: 1.5,
+      delay: 0,
+      ease: 'power2.out',
+      onComplete: () => {
+          gsap.set(".loader", { display: "none" });
           }
-        );
+    }, "<+0.3")
+    .to(".logo-loader", {
+      y: "-100%",
+      duration: 0.2,
+      delay: 0,
+      ease: 'power1.out',
+      onComplete: () => {
+          lenis.start()
+          gsap.set(".section-home-services", { display: "block" });
+          }
+    }, "<")
+    
+
+  // Return the timeline
+  return tl;
+}
+
+// GSAP timeline function for click event
+function loaderOnLinkClick(destination) {
+  gsap.set(".loader", { display: "block" });
+  gsap.fromTo(
+    ".loader_background", {
+      y: "100%"
+    }, {
+      y: "0%",
+      duration: 0.5,
+      ease: 'power2.out',
+      onComplete: () => {
+        window.location = destination;
+      }
+    }
+  );
+}
+
+// Call loaderOnPageLoad when the page loads
+$(document).ready(function () {
+  loaderOnPageLoad();
+
+// Code for click event
+  $(document).on("click", "a", function (e) {
+    if (
+      $(this).prop("hostname") === window.location.host &&
+      $(this).attr("href").indexOf("#") === -1 &&
+      $(this).attr("target") !== "_blank"
+    ) {
+      e.preventDefault();
+      let destination = $(this).attr("href");
+      gsap.set(".loader", { display: "block" });
+
+      // Call loaderOnLinkClick when a link is clicked
+      loaderOnLinkClick(destination);
     }
   });
-  
-  // On click of the back button
-  window.onpageshow = function(event){
-  	if (event.persisted) {
-    	window.location.reload();
+
+// On click of the back button
+  window.onpageshow = function (event) {
+    if (event.persisted) {
+      window.location.reload();
     }
   }
 });
+
+// Loader And Page Transition End
+
+// Horizontal rule 
+$(".horizontal-rule").each(function (index, element) {
+  let triggerElement = $(this);
+  let targetElement = $(element);
+
+  let tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: triggerElement,
+      // trigger element - viewport
+      start: "top bottom",
+    },
+  });
+  tl.from(targetElement, {
+    width: "0%",
+    duration: 1,
+    delay: 0.1,
+    ease: "power1.out",
+  });
+});
+
+// Scroll to top on page refresh
+document.addEventListener("DOMContentLoaded", function() {
+  const scrollTopButton = document.querySelector('.scroll-top');
+  
+  if (scrollTopButton) {
+    const clickEvent = new Event('click');
+    scrollTopButton.dispatchEvent(clickEvent);
+    
+    
+  }
+});
+
+// Footer back to top botton
+document.querySelector('.text-link.is-back_to_top').addEventListener('click', function() {
+  lenis.scrollTo('#top');
+});
+
+
+// Page refresh on resize
+// Define breakpoints
+const breakpoints = [479, 767, 991, 1239, 1439, 1919];
+
+// Store the initial window width
+let initialWidth = window.innerWidth;
+
+// Function to check if the width crosses any breakpoints
+function shouldRefresh(newWidth) {
+  for (let breakpoint of breakpoints) {
+    if ((initialWidth <= breakpoint && newWidth > breakpoint) ||
+        (initialWidth > breakpoint && newWidth <= breakpoint)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Add event listener for resize
+window.addEventListener('resize', function () {
+  let newWidth = window.innerWidth;
+  if (shouldRefresh(newWidth)) {
+    window.location.reload();
+  }
+});
+
+// Copyright Year Auto-Update
+const currentYear = new Date().getFullYear();
+$(`[data="year"]`).html(currentYear);
+
+// Button hover
+$(".btn_wrap").each(function (index) {
+  let bgPanel = $(this).children().eq(0);
+  let fgPanel = $(this).children().eq(1);
+
+  let tl = gsap.timeline({ paused: true, defaults: { duration: 0.1, ease: "none" } });
+  tl.set(bgPanel, { opacity: 1 });
+  tl.fromTo(fgPanel, { clipPath: "polygon(100% 0%, 100% 100%, 100% 100%, 0% 100%, 0% 0%)" }, { clipPath: "polygon(100% 0%, 100% 0%, 0% 100%, 0% 100%, 0% 0%)" });
+  tl.fromTo(bgPanel, { clipPath: "polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%)" }, { clipPath: "polygon(100% 0%, 100% 100%, 0% 100%, 0% 100%, 100% 0%)" }, "<");
+  tl.to(fgPanel, { clipPath: "polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)" });
+  tl.to(bgPanel, { clipPath: "polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)" }, "<");
+
+  $(this).on("mouseenter", function () {
+    tl.play();
+  });
+  $(this).on("mouseleave", function () {
+    tl.reverse();
+  });
+});
+
+// Swiper Slider
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const swiper = new Swiper(".swiper-marquee", {
+  slidesPerView: 'auto',
+  spaceBetween: '1.5rem',
+  loop: true,
+  speed: 4000,
+  allowTouchMove: false,
+  autoplay: prefersReducedMotion ? false : {
+    delay: 1,
+    disableOnInteraction: false,
+  },
+});
+
+// Function to handle visibility based on localStorage
+document.addEventListener("DOMContentLoaded", () => {
+  const swiperMarquee = document.querySelector(".swiper.swiper-marquee");
+
+  if (!swiperMarquee) {
+    console.error("Swiper element not found");
+    return;
+  }
+
+  // Check if the swiper was closed in a previous session
+  const isClosed = localStorage.getItem("swiperClosed");
+
+  if (isClosed === "true") {
+    swiperMarquee.style.display = "none"; // Hide the swiper
+  }
+});
+
+// Click event to hide the swiper and save state
+const closeButton = document.querySelector(".swiper-close-wrapper");
+
+if (!closeButton) {
+  console.error("Close button not found");
+} else {
+  closeButton.addEventListener("click", () => {
+    const swiperMarquee = document.querySelector(".swiper.swiper-marquee");
+
+    if (!swiperMarquee) {
+      console.error("Swiper element not found");
+      return;
+    }
+
+    // Hide the swiper and save state
+    swiperMarquee.style.display = "none";
+    localStorage.setItem("swiperClosed", "true");
+  });
+}
+
+// Cookie marquee
+$(document).ready(function() {
+  if (!Cookies.get('alert')) { 
+      $('.swiper.swiper-marquee').css('display', 'block');
+  }
+
+  $('.swiper-close-wrapper').on('click', function() {
+      setTimeout(function() {
+          $('.swiper.swiper-marquee').css('display', 'none'); // Hide the element
+          Cookies.set('alert', true, { expires: 1 }); // Set the cookie with a 1-day expiration
+      }, 0); // Use 0ms delay to queue the function at the end of the current call stack
+  });
+});
+
+
 
 
