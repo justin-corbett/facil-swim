@@ -21,34 +21,6 @@ function raf(time) {
 
 requestAnimationFrame(raf);
 
-// Home hero scroll track
-$(".scroll-track.is-home_hero").each(function () {
-    let triggerElement = $(this);
-    let videoElement = $(".hero-video-wrapper");
-    let titleLine1 = $(".title-h_scroll.is-1");
-    let titleLine2 = $(".title-h_scroll.is-2");
-    let titleLine3 = $(".title-h_scroll.is-3");
-  
-    let tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: triggerElement,
-        start: "top top",
-        end: "bottom 50%",
-        scrub: 1,
-      },
-    });
-
-    // Animate title lines in parallel
-    tl.to(titleLine1, { x: "-10%", duration: 1 }, "<");
-    tl.to(titleLine2, { x: "10%", duration: 1 }, "<");
-    tl.to(titleLine3, { x: "-10%", duration: 1 }, "<");
-
-    // Animate video dimensions in sync with previous animations
-    tl.to(videoElement, { scale: "0.8", duration: 1 }, "<");
-
-});
-
-
 // Hover animation using GSAP
 gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   // On hover
@@ -82,6 +54,37 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   });
 });
 
+// Navigation BG Gradient Fade In
+$(".scroll-track.is-home_hero").each(function (index) {
+  let triggerElement = $(this);
+  let imageLeft = $(".hero-image_left");
+  let imageRight = $(".hero-image_right");
+
+  let tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: triggerElement,
+      start: "top top", // trigger element starts at the top of the viewport
+      end: "bottom bottom", // trigger element ends at the bottom of the viewport
+      scrub: 1, // smooth scrubbing effect
+    },
+  });
+
+  // Animate the left image
+  tl.to(imageLeft, {
+    scale: 1,
+    y: "-15vh",
+    duration: 1,
+  });
+
+  // Animate the right image
+  tl.to(imageRight, {
+    scale: 1,
+    y: "-15vh",
+    duration: 1,
+  }, "<"); // "<" makes the second animation start at the same time as the first
+});
+
+
 
 // Navigation BG Gradient Fade In
 $(".scroll-track.is-home_hero").each(function (index) {
@@ -92,14 +95,14 @@ $(".scroll-track.is-home_hero").each(function (index) {
     scrollTrigger: {
       trigger: triggerElement,
       // trigger element - viewport
-      start: "40% top",
-      end: "bottom bottom",
+      start: "25% top",
+      end: "25% top",
       scrub: 1,
     },
   });
   tl.to(targetElement, {
     opacity: "100%",
-    duration: 1,
+    duration: 0.5,
   });
 });
 
