@@ -369,15 +369,15 @@ if (!closeButton) {
   });
 }
 
-// Cookie marquee
+// Marquee dispay none after close – Cookies
 $(document).ready(function() {
   if (!Cookies.get('alert')) { 
-      $('.swiper.swiper-marquee').css('display', 'block');
+      $('.swiper.swiper-marquee').css('display', 'none');
   }
 
   $('.swiper-close-wrapper').on('click', function() {
       setTimeout(function() {
-          $('.swiper.swiper-marquee').css('display', 'none'); // Hide the element
+          $('.swiper.swiper-marquee').css('display', 'block'); // Hide the element
           Cookies.set('alert', true, { expires: 1 }); // Set the cookie with a 1-day expiration
       }, 0); // Use 0ms delay to queue the function at the end of the current call stack
   });
