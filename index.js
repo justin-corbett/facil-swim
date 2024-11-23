@@ -54,7 +54,7 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   });
 });
 
-// Navigation BG Gradient Fade In
+// Home hero fixed images move up
 $(".scroll-track.is-home_hero").each(function (index) {
   let triggerElement = $(this);
   let imageLeft = $(".hero-image_left");
@@ -84,27 +84,46 @@ $(".scroll-track.is-home_hero").each(function (index) {
   }, "<"); // "<" makes the second animation start at the same time as the first
 });
 
+$(".navigation").hover(
+  function () {
+    // Add the class .is-active on hover
+    $(this).addClass("is-active");
+  },
+  function () {
+    // Remove the class .is-active on hover out only if it wasn't already there before hover
+    if (!$(this).is(":hover")) {
+      let hasScrollTriggered = $(this).data("scroll-triggered") === true;
+      if (!hasScrollTriggered) {
+        $(this).removeClass("is-active");
+      }
+    }
+  }
+);
 
-
-// Navigation BG Gradient Fade In
-$(".scroll-track.is-home_hero").each(function (index) {
+// Manage the scroll-triggered .is-active state
+$(".scroll-track.is-home_hero").each(function () {
   let triggerElement = $(this);
-  let targetElement = $(".navigation-bg");
+  let targetElement = $(".navigation");
 
-  let tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: triggerElement,
-      // trigger element - viewport
-      start: "25% top",
-      end: "25% top",
-      scrub: 1,
+  ScrollTrigger.create({
+    trigger: triggerElement,
+    start: "25% top",
+    end: "25% top",
+    scrub: 1,
+    onEnter: () => {
+      targetElement.addClass("is-active");
+      targetElement.data("scroll-triggered", true); // Mark as triggered
+    },
+    onLeaveBack: () => {
+      targetElement.removeClass("is-active");
+      targetElement.data("scroll-triggered", false); // Unmark as triggered
     },
   });
-  tl.to(targetElement, {
-    opacity: "100%",
-    duration: 0.5,
-  });
 });
+
+
+
+
 
 // Loader And Page Transition Start
 
@@ -331,58 +350,3 @@ const swiper = new Swiper(".swiper-marquee", {
     disableOnInteraction: false,
   },
 });
-
-// Function to handle visibility based on localStorage
-document.addEventListener("DOMContentLoaded", () => {
-  const swiperMarquee = document.querySelector(".swiper.swiper-marquee");
-
-  if (!swiperMarquee) {
-    console.error("Swiper element not found");
-    return;
-  }
-
-  // Check if the swiper was closed in a previous session
-  const isClosed = localStorage.getItem("swiperClosed");
-
-  if (isClosed === "true") {
-    swiperMarquee.style.display = "none"; // Hide the swiper
-  }
-});
-
-// Click event to hide the swiper and save state
-const closeButton = document.querySelector(".swiper-close-wrapper");
-
-if (!closeButton) {
-  console.error("Close button not found");
-} else {
-  closeButton.addEventListener("click", () => {
-    const swiperMarquee = document.querySelector(".swiper.swiper-marquee");
-
-    if (!swiperMarquee) {
-      console.error("Swiper element not found");
-      return;
-    }
-
-    // Hide the swiper and save state
-    swiperMarquee.style.display = "none";
-    localStorage.setItem("swiperClosed", "true");
-  });
-}
-
-// Marquee dispay none after close – Cookies
-$(document).ready(function() {
-  if (!Cookies.get('alert')) { 
-      $('.swiper.swiper-marquee').css('display', 'none');
-  }
-
-  $('.swiper-close-wrapper').on('click', function() {
-      setTimeout(function() {
-          $('.swiper.swiper-marquee').css('display', 'block'); // Hide the element
-          Cookies.set('alert', true, { expires: 1 }); // Set the cookie with a 1-day expiration
-      }, 0); // Use 0ms delay to queue the function at the end of the current call stack
-  });
-});
-
-
-
-
