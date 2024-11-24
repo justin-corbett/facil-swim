@@ -5,22 +5,6 @@ $(document). keydown (function (e) {
 	}
 });
 
-// Initialize Lenis
-const lenis = new Lenis();
-
-// Listen for the scroll event and log the event data
-lenis.on('scroll', (e) => {
-  console.log(e);
-});
-
-// Use requestAnimationFrame to continuously update the scroll
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-
-requestAnimationFrame(raf);
-
 // Hover animation using GSAP
 gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   // On hover
@@ -124,7 +108,7 @@ $(".scroll-track.is-home_hero").each(function () {
 
 
 
-
+/*
 // Loader And Page Transition Start
 
 // GSAP timeline function for pageload
@@ -132,10 +116,6 @@ function loaderOnPageLoad() {
  
   // Create a GSAP timeline
   let tl = gsap.timeline();
-
-   // Stops flicker on homepage
-   gsap.set(".section-home-services", { display: "none" });
-
 
   // Add animations to the timeline
   tl.to(".logo-loader", {
@@ -245,6 +225,8 @@ $(document).ready(function () {
     }
   }
 });
+*/
+
 
 // Loader And Page Transition End
 
@@ -263,7 +245,7 @@ $(".horizontal-rule").each(function (index, element) {
   tl.from(targetElement, {
     width: "0%",
     duration: 1,
-    delay: 0.1,
+    delay: 0.2,
     ease: "power1.out",
   });
 });
@@ -328,10 +310,10 @@ $(".btn_wrap").each(function (index) {
   tl.to(fgPanel, { clipPath: "polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)" });
   tl.to(bgPanel, { clipPath: "polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)" }, "<");
 
-  $(this).on("mouseenter", function () {
+  $(".btn_wrap").on("mouseenter", function () {
     tl.play();
   });
-  $(this).on("mouseleave", function () {
+  $(".btn_wrap").on("mouseleave", function () {
     tl.reverse();
   });
 });
@@ -349,4 +331,9 @@ const swiper = new Swiper(".swiper-marquee", {
     delay: 1,
     disableOnInteraction: false,
   },
+});
+
+// Fix Footer Logo Text Line Height
+document.addEventListener("DOMContentLoaded", () => {
+  gsap.to(".footer-logo-wrapper", { translateY: "3rem" });
 });
