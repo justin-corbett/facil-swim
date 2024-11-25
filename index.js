@@ -1,3 +1,6 @@
+// Initialize GSAP
+gsap.registerPlugin();
+gsap.registerPlugin(ScrollTrigger, Flip);
 
 // Page Transition
 // GSAP timeline function for click event
