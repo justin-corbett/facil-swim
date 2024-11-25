@@ -279,7 +279,7 @@ $(".btn_wrap").each(function (index) {
 // Swiper Slider
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const swiper = new Swiper(".swiper-marquee", {
+const swiper = new Swiper(".swiper.swiper-marquee", {
   slidesPerView: 'auto',
   spaceBetween: '1.5rem',
   loop: true,
