@@ -1,3 +1,5 @@
+
+// Page Transition
 // GSAP timeline function for click event
 function pageTransition(destination) {
   gsap.to(".page-transition", {
@@ -10,7 +12,7 @@ function pageTransition(destination) {
   });
 }
 
-
+// Page Transition
 // Code for click event
   $(document).on("click", "a", function (e) {
     if (
@@ -20,21 +22,19 @@ function pageTransition(destination) {
     ) {
       e.preventDefault();
       let destination = $(this).attr("href");
-      gsap.set(".loader-wrap", { display: "flex" });
 
       // Call loaderOnLinkClick when a link is clicked
       pageTransition (destination);
     }
   });
 
+// Page Transition
 // On click of the back button
   window.onpageshow = function (event) {
     if (event.persisted) {
       window.location.reload();
     }
   }
-
-
 
 // Show/hide grid w/ Shift + G
 $(document). keydown (function (e) {
@@ -112,18 +112,18 @@ $(".scroll-track.is-home_hero").each(function (index) {
 });
 
 
-// Original hover logic
+// Navigation hover home page
 $(".navigation").hover(
   function () {
     // Add the class .is-active on hover
-    $(this).addClass("is-active");
+    $(this).addClass("is-white");
   },
   function () {
     // Only remove the class .is-active on hover out if it's the homepage
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
       let hasScrollTriggered = $(this).data("scroll-triggered") === true;
       if (!hasScrollTriggered) {
-        $(this).removeClass("is-active");
+        $(this).removeClass("is-white");
       }
     }
   }
@@ -132,9 +132,11 @@ $(".navigation").hover(
 // Function to ensure .is-active is not removed on the Shop page
 function ensureShopPageActive() {
   if (window.location.pathname.includes("shop")) {
+    $(".navigation").addClass("is-white"); // Add .is-active when on the About page
+    $(".page-sub_title").addClass("is-blue"); // Add .is-active when on the About page
     $(".navigation").hover(
       function () {
-        $(this).addClass("is-active"); // Add the class on hover
+        $(this).addClass("is-white"); // Add the class on hover
       },
       function () {
         // Do nothing on hover out for Shop page
@@ -145,6 +147,25 @@ function ensureShopPageActive() {
 
 // Call the function to handle Shop page behavior
 ensureShopPageActive();
+
+// Function to ensure .is-active is not removed on the About page
+function ensureAboutPageActive() {
+  if (window.location.pathname.includes("about")) {
+    $(".navigation").addClass("is-blue"); // Add .is-active when on the About page
+    $(".page-sub_title").addClass("is-light_blue"); // Add .is-active when on the About page
+    $(".navigation").hover(
+      function () {
+        $(this).addClass("is-blue"); // Add the class on hover
+      },
+      function () {
+        // Do nothing on hover out for Shop page
+      }
+    );
+  }
+}
+
+// Call the function to handle Shop page behavior
+ensureAboutPageActive();
 
 
 // Manage the scroll-triggered .is-active state
@@ -158,20 +179,15 @@ $(".scroll-track.is-home_hero").each(function () {
     end: "25% top",
     scrub: 1,
     onEnter: () => {
-      targetElement.addClass("is-active");
+      targetElement.addClass("is-white");
       targetElement.data("scroll-triggered", true); // Mark as triggered
     },
     onLeaveBack: () => {
-      targetElement.removeClass("is-active");
+      targetElement.removeClass("is-white");
       targetElement.data("scroll-triggered", false); // Unmark as triggered
     },
   });
 });
-
-// Shop Page Navigation is-active class add
-if (window.location.pathname.includes("shop")) {
-  $(".navigation").addClass("is-active");
-}
 
 // Horizontal rule 
 $(".horizontal-rule").each(function (index, element) {
