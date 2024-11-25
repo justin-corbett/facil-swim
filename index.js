@@ -1,3 +1,45 @@
+// GSAP timeline function for click event
+function pageTransition (destination) {
+  gsap.set(".loader", { display: "block" });
+  gsap.fromTo(
+    ".loader_background", {
+      y: "100%"
+    }, {
+      y: "0%",
+      duration: 0.5,
+      ease: 'power2.out',
+      onComplete: () => {
+        window.location = destination;
+      }
+    }
+  );
+}
+
+// Code for click event
+  $(document).on("click", "a", function (e) {
+    if (
+      $(this).prop("hostname") === window.location.host &&
+      $(this).attr("href").indexOf("#") === -1 &&
+      $(this).attr("target") !== "_blank"
+    ) {
+      e.preventDefault();
+      let destination = $(this).attr("href");
+      gsap.set(".loader", { display: "block" });
+
+      // Call loaderOnLinkClick when a link is clicked
+      pageTransition (destination);
+    }
+  });
+
+// On click of the back button
+  window.onpageshow = function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  }
+
+
+
 // Show/hide grid w/ Shift + G
 $(document). keydown (function (e) {
 	if (e. shiftKey && e. key === "G") {
@@ -38,11 +80,53 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   });
 });
 
+// GSAP timeline function for click event
+  function loaderOnLinkClick(destination) {
+    gsap.set(".loader", { display: "block" });
+    gsap.fromTo(
+      ".loader_background", {
+        y: "100%"
+      }, {
+        y: "0%",
+        duration: 0.5,
+        ease: 'power2.out',
+        onComplete: () => {
+          window.location = destination;
+        }
+      }
+    );
+  }
+  
+// Code for click event
+    $(document).on("click", "a", function (e) {
+      if (
+        $(this).prop("hostname") === window.location.host &&
+        $(this).attr("href").indexOf("#") === -1 &&
+        $(this).attr("target") !== "_blank"
+      ) {
+        e.preventDefault();
+        let destination = $(this).attr("href");
+        gsap.set(".loader", { display: "block" });
+  
+        // Call loaderOnLinkClick when a link is clicked
+        loaderOnLinkClick(destination);
+      }
+    });
+  
+// On click of the back button
+    window.onpageshow = function (event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    }
+  });
+
 // Home hero fixed images move up
 $(".scroll-track.is-home_hero").each(function (index) {
   let triggerElement = $(this);
   let imageLeft = $(".hero-image_left");
   let imageRight = $(".hero-image_right");
+  let imageCenter = $(".hero-image_center");
 
   let tl = gsap.timeline({
     scrollTrigger: {
@@ -55,27 +139,33 @@ $(".scroll-track.is-home_hero").each(function (index) {
 
   // Animate the left image
   tl.to(imageLeft, {
-    scale: 1,
     y: "-15vh",
     duration: 1,
   });
 
   // Animate the right image
   tl.to(imageRight, {
-    scale: 1,
     y: "-15vh",
     duration: 1,
-  }, "<"); // "<" makes the second animation start at the same time as the first
+  }, "<");
+
+  // Animate the center image
+  tl.to(imageCenter, {
+    y: "-15vh",
+    duration: 1,
+  }, "<"); 
 });
 
+
+// Original hover logic
 $(".navigation").hover(
   function () {
     // Add the class .is-active on hover
     $(this).addClass("is-active");
   },
   function () {
-    // Remove the class .is-active on hover out only if it wasn't already there before hover
-    if (!$(this).is(":hover")) {
+    // Only remove the class .is-active on hover out if it's the homepage
+    if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
       let hasScrollTriggered = $(this).data("scroll-triggered") === true;
       if (!hasScrollTriggered) {
         $(this).removeClass("is-active");
@@ -83,6 +173,24 @@ $(".navigation").hover(
     }
   }
 );
+
+// Function to ensure .is-active is not removed on the Shop page
+function ensureShopPageActive() {
+  if (window.location.pathname.includes("shop")) {
+    $(".navigation").hover(
+      function () {
+        $(this).addClass("is-active"); // Add the class on hover
+      },
+      function () {
+        // Do nothing on hover out for Shop page
+      }
+    );
+  }
+}
+
+// Call the function to handle Shop page behavior
+ensureShopPageActive();
+
 
 // Manage the scroll-triggered .is-active state
 $(".scroll-track.is-home_hero").each(function () {
@@ -105,130 +213,10 @@ $(".scroll-track.is-home_hero").each(function () {
   });
 });
 
-
-
-
-/*
-// Loader And Page Transition Start
-
-// GSAP timeline function for pageload
-function loaderOnPageLoad() {
- 
-  // Create a GSAP timeline
-  let tl = gsap.timeline();
-
-  // Add animations to the timeline
-  tl.to(".logo-loader", {
-      y: "0%",
-      duration: 0.4,
-      delay: 0.2,
-      ease: 'power1.out',
-      onComplete: () => {
-          lenis.scrollTo('#top', {
-              onComplete: () => {
-                lenis.stop(); // Stops the scroll animation
-              }
-            });
-      }
-  }, "<+0.3")
-    
-    .to(".loader_background-gradient-1", {
-      y: "-100%",
-      duration: 1.5,
-      delay: 0.8,
-      ease: 'power2.out',
-    })
-    .to(".loader_background-gradient-2", {
-      y: "-100%",
-      duration: 1.5,
-      delay: 0,
-      ease: 'power2.out',
-    }, "<+0.2")
-    .to(".loader_background-gradient-3", {
-      y: "-100%",
-      duration: 1.5,
-      delay: 0,
-      ease: 'power2.out',
-    }, "<+0.2")
-    .to(".loader_background-gradient-4", {
-      y: "-100%",
-      duration: 1.5,
-      delay: 0,
-      ease: 'power2.out',
-    }, "<+0.2")
-    .to(".loader_background", {
-      y: "-100%",
-      duration: 1.5,
-      delay: 0,
-      ease: 'power2.out',
-      onComplete: () => {
-          gsap.set(".loader", { display: "none" });
-          }
-    }, "<+0.3")
-    .to(".logo-loader", {
-      y: "-100%",
-      duration: 0.2,
-      delay: 0,
-      ease: 'power1.out',
-      onComplete: () => {
-          lenis.start()
-          gsap.set(".section-home-services", { display: "block" });
-          }
-    }, "<")
-    
-
-  // Return the timeline
-  return tl;
+// Shop Page Navigation is-active class add
+if (window.location.pathname.includes("shop")) {
+  $(".navigation").addClass("is-active");
 }
-
-// GSAP timeline function for click event
-function loaderOnLinkClick(destination) {
-  gsap.set(".loader", { display: "block" });
-  gsap.fromTo(
-    ".loader_background", {
-      y: "100%"
-    }, {
-      y: "0%",
-      duration: 0.5,
-      ease: 'power2.out',
-      onComplete: () => {
-        window.location = destination;
-      }
-    }
-  );
-}
-
-// Call loaderOnPageLoad when the page loads
-$(document).ready(function () {
-  loaderOnPageLoad();
-
-// Code for click event
-  $(document).on("click", "a", function (e) {
-    if (
-      $(this).prop("hostname") === window.location.host &&
-      $(this).attr("href").indexOf("#") === -1 &&
-      $(this).attr("target") !== "_blank"
-    ) {
-      e.preventDefault();
-      let destination = $(this).attr("href");
-      gsap.set(".loader", { display: "block" });
-
-      // Call loaderOnLinkClick when a link is clicked
-      loaderOnLinkClick(destination);
-    }
-  });
-
-// On click of the back button
-  window.onpageshow = function (event) {
-    if (event.persisted) {
-      window.location.reload();
-    }
-  }
-});
-*/
-
-
-// Loader And Page Transition End
 
 // Horizontal rule 
 $(".horizontal-rule").each(function (index, element) {
@@ -333,7 +321,7 @@ const swiper = new Swiper(".swiper-marquee", {
   },
 });
 
-// Fix Footer Logo Text Line Height
-document.addEventListener("DOMContentLoaded", () => {
-  gsap.to(".footer-logo-wrapper", { translateY: "3rem" });
-});
+// Balance text
+balanceText("h1, h2, h3, h4, h5, h6");
+
+
