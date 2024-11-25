@@ -1,19 +1,14 @@
 // GSAP timeline function for click event
 function pageTransition (destination) {
-  gsap.set(".loader", { display: "block" });
-  gsap.fromTo(
-    ".loader_background", {
-      y: "100%"
-    }, {
-      y: "0%",
-      duration: 0.5,
-      ease: 'power2.out',
+  gsap.to(
+    ".page-transition", {
+      y: "0%"
+    },
       onComplete: () => {
         window.location = destination;
       }
-    }
-  );
-}
+    )}
+
 
 // Code for click event
   $(document).on("click", "a", function (e) {
@@ -24,7 +19,7 @@ function pageTransition (destination) {
     ) {
       e.preventDefault();
       let destination = $(this).attr("href");
-      gsap.set(".loader", { display: "block" });
+      gsap.set(".loader-wrap", { display: "flex" });
 
       // Call loaderOnLinkClick when a link is clicked
       pageTransition (destination);
@@ -79,47 +74,6 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
     });
   });
 });
-
-// GSAP timeline function for click event
-  function loaderOnLinkClick(destination) {
-    gsap.set(".loader", { display: "block" });
-    gsap.fromTo(
-      ".loader_background", {
-        y: "100%"
-      }, {
-        y: "0%",
-        duration: 0.5,
-        ease: 'power2.out',
-        onComplete: () => {
-          window.location = destination;
-        }
-      }
-    );
-  }
-  
-// Code for click event
-    $(document).on("click", "a", function (e) {
-      if (
-        $(this).prop("hostname") === window.location.host &&
-        $(this).attr("href").indexOf("#") === -1 &&
-        $(this).attr("target") !== "_blank"
-      ) {
-        e.preventDefault();
-        let destination = $(this).attr("href");
-        gsap.set(".loader", { display: "block" });
-  
-        // Call loaderOnLinkClick when a link is clicked
-        loaderOnLinkClick(destination);
-      }
-    });
-  
-// On click of the back button
-    window.onpageshow = function (event) {
-      if (event.persisted) {
-        window.location.reload();
-      }
-    }
-  });
 
 // Home hero fixed images move up
 $(".scroll-track.is-home_hero").each(function (index) {
