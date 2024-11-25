@@ -1,13 +1,14 @@
 // GSAP timeline function for click event
-function pageTransition (destination) {
-  gsap.to(
-    ".page-transition", {
-      y: "0%"
-    },
+function pageTransition(destination) {
+  gsap.to(".page-transition", {
+      y: "0%",
+      duration: 0.5, // Optional duration
+      ease: "power2.inOut",
       onComplete: () => {
-        window.location = destination;
-      }
-    )}
+          window.location = destination;
+      },
+  });
+}
 
 
 // Code for click event
