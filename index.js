@@ -132,7 +132,6 @@ $(".navigation").hover(
 function ensureShopPageActive() {
   if (window.location.pathname.includes("shop")) {
     $(".navigation").addClass("is-white"); // Add .is-active when on the About page
-    $(".page-sub_title").addClass("is-blue"); // Add .is-active when on the About page
     $(".navigation").hover(
       function () {
         $(this).addClass("is-white"); // Add the class on hover
@@ -151,7 +150,6 @@ ensureShopPageActive();
 function ensureAboutPageActive() {
   if (window.location.pathname.includes("about")) {
     $(".navigation").addClass("is-blue"); // Add .is-active when on the About page
-    $(".page-sub_title").addClass("is-light_blue"); // Add .is-active when on the About page
     $(".navigation").hover(
       function () {
         $(this).addClass("is-blue"); // Add the class on hover
@@ -165,6 +163,24 @@ function ensureAboutPageActive() {
 
 // Call the function to handle Shop page behavior
 ensureAboutPageActive();
+
+// Function to ensure .is-active is not removed on the About page
+function ensureProductPageActive() {
+  if (window.location.pathname.includes("product")) {
+    $(".navigation").addClass("is-white"); // Add .is-active when on the About page
+    $(".navigation").hover(
+      function () {
+        $(this).addClass("is-white"); // Add the class on hover
+      },
+      function () {
+        // Do nothing on hover out for Shop page
+      }
+    );
+  }
+}
+
+// Call the function to handle Shop page behavior
+ensureProductPageActive();
 
 
 // Manage the scroll-triggered .is-active state
@@ -295,5 +311,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Balance text
 balanceText("h1, h2, h3, h4, h5, h6");
+
+// Product Page + - Buttons
+$('.input-plus').click(function() {
+  var $input = $(this).parents('.quantity-wrap').find('.input-number');
+  var val = parseInt($input.val(), 10);
+  $input.val(val + 1);
+});
+
+$('.input-minus').click(function() {
+  var $input = $(this).parents('.quantity-wrap').find('.input-number');
+  var val = parseInt($input.val(), 10);
+  $input.val(Math.max(val - 1, 1));
+})
 
 
