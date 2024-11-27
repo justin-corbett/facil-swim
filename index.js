@@ -273,10 +273,12 @@ const currentYear = new Date().getFullYear();
 $(`[data="year"]`).html(currentYear);
 
 // Button hover
-$(".btn_wrap").each(function (index) {
-  let bgPanel = $(this).children().eq(0);
-  let fgPanel = $(this).children().eq(1);
+$(".btn_wrap").each(function (index, btnWrap) {
+  // Get child elements of the current button wrapper
+  let bgPanel = $(btnWrap).children().eq(0);
+  let fgPanel = $(btnWrap).children().eq(1);
 
+  // Create a timeline for this button
   let tl = gsap.timeline({ paused: true, defaults: { duration: 0.1, ease: "none" } });
   tl.set(bgPanel, { opacity: 1 });
   tl.fromTo(fgPanel, { clipPath: "polygon(100% 0%, 100% 100%, 100% 100%, 0% 100%, 0% 0%)" }, { clipPath: "polygon(100% 0%, 100% 0%, 0% 100%, 0% 100%, 0% 0%)" });
@@ -284,13 +286,16 @@ $(".btn_wrap").each(function (index) {
   tl.to(fgPanel, { clipPath: "polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)" });
   tl.to(bgPanel, { clipPath: "polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)" }, "<");
 
-  $(".btn_wrap").on("mouseenter", function () {
+  // Attach hover events to the current button
+  $(btnWrap).on("mouseenter", function () {
     tl.play();
   });
-  $(".btn_wrap").on("mouseleave", function () {
+
+  $(btnWrap).on("mouseleave", function () {
     tl.reverse();
   });
 });
+
 
 // Swiper Slider
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -309,8 +314,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+
+/*
 // Balance text
 balanceText("h1, h2, h3, h4, h5, h6");
+*/
 
 // Product Page + - Buttons
 $('.input-plus').click(function() {
@@ -324,5 +332,32 @@ $('.input-minus').click(function() {
   var val = parseInt($input.val(), 10);
   $input.val(Math.max(val - 1, 1));
 })
+
+// GSAP Split Text
+// Loader Animation – Page Hero Text
+const splitTextTimeline = gsap.timeline({ paused: true });
+const split = new SplitText("#hero", { type: "words" });
+
+splitTextTimeline.from(split.words, {
+  duration: 1,
+  y: 100,
+  autoAlpha: 0,
+  stagger: 0.05,
+  ease: "power2.out"
+});
+
+// Loader Animation – Loader Text
+const loaderSplitTextTimeline = gsap.timeline({ paused: true });
+const split = new SplitText(".loader-title", { type: "chars" });
+
+loaderSplitTextTimeline.from(split.chars, {
+  duration: 1,
+  y: 100,
+  autoAlpha: 0,
+  stagger: 0.05,
+  ease: "power2.out"
+});
+
+
 
 
