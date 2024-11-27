@@ -314,12 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
-/*
-// Balance text
-balanceText("h1, h2, h3, h4, h5, h6");
-*/
-
 // Product Page + - Buttons
 $('.input-plus').click(function() {
   var $input = $(this).parents('.quantity-wrap').find('.input-number');
@@ -346,11 +340,72 @@ splitTextTimeline.from(split.words, {
   ease: "power2.out"
 });
 
-// Loader Animation – Loader Text
-const loaderSplitTextTimeline = gsap.timeline({ paused: true });
-const split = new SplitText(".loader-title", { type: "chars" });
+// GSAP Split Text
+// Create SplitText animation for Footer Logo
+const footerSplitTextTimeline = gsap.timeline({
+  paused: true, // Keeps the timeline paused initially
+  scrollTrigger: {
+    trigger: ".text-footer-logo", // Element to trigger the animation
+    start: "top 100%", // When top of element is at 100% of viewport
+    toggleActions: "restart none none none", // Restart on enter, do nothing on leave
+    onLeave: () => footerSplitTextTimeline.pause(0), // Pause and reset on leave
+    onEnter: () => footerSplitTextTimeline.play(0), // Replay from start on re-enter
+  },
+});
 
-loaderSplitTextTimeline.from(split.chars, {
+const footerSplit = new SplitText(".text-footer-logo", { type: "chars" });
+
+footerSplitTextTimeline.from(footerSplit.chars, {
+  duration: 1,
+  y: 100,
+  opacity: 0,
+  stagger: 0.05,
+  ease: "power2.out",
+});
+
+// GSAP Split Text
+// Create about text fade in while scrolling
+const aboutSplit = new SplitText(".about-scroll-text", { type: "chars, words" });
+
+// ScrollTrigger animation
+gsap.fromTo(
+  aboutSplit.chars,
+  {
+    opacity: 0.3,  // Starting opacity
+  },
+  {
+    opacity: 1,  // Ending opacity
+    duration: 2,  // Adjust for smoothness
+    stagger: 0.05,  // Delays between character animations
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: ".about-scroll-text", // Element to trigger the animation
+      start: "top 80%", // Start when top of element hits 80% of viewport
+      end: "bottom 20%", // End when bottom of element hits 20% of viewport
+      scrub: true, // Smooth scrubbing effect
+    },
+  }
+);
+
+// GSAP Split Text
+// Loader Animation – Shop Hero Text
+const shopSplitTextTimeline = gsap.timeline({ paused: true });
+const shopSplit = new SplitText("#shop-hero", { type: "lines" });
+
+shopSplitTextTimeline.from(shopSplit.lines, {
+  duration: 1,
+  y: 100,
+  autoAlpha: 0,
+  stagger: 0.05,
+  ease: "power2.out"
+});
+
+// GSAP Split Text
+// Loader Animation – Product Page Description
+const productDescriptionSplitText = gsap.timeline({ paused: true });
+const productDescriptionSplit = new SplitText(".product-description", { type: "lines" });
+
+productDescriptionSplitText.from(productDescriptionSplit.lines, {
   duration: 1,
   y: 100,
   autoAlpha: 0,
