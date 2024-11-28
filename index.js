@@ -42,6 +42,7 @@ $(document). keydown (function (e) {
 	}
 });
 
+// All Pages – Product List
 // Hover animation using GSAP
 gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   // On hover
@@ -75,7 +76,7 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   });
 });
 
-// Home hero fixed images move up
+// Home Page – Hero Images Scroll Up
 $(".scroll-track.is-home_hero").each(function (index) {
   let triggerElement = $(this);
   let imageLeft = $(".hero-image_left");
@@ -110,8 +111,7 @@ $(".scroll-track.is-home_hero").each(function (index) {
   }, "<"); 
 });
 
-
-// Navigation hover home page
+// Home Page Navigation – Hover In/Out
 $(".navigation").hover(
   function () {
     // Add the class .is-active on hover
@@ -128,7 +128,7 @@ $(".navigation").hover(
   }
 );
 
-// Function to ensure .is-active is not removed on the Shop page
+// Shop Page Navigation – Hover In/Out 
 function ensureShopPageActive() {
   if (window.location.pathname.includes("shop")) {
     $(".navigation").addClass("is-white"); // Add .is-active when on the About page
@@ -146,41 +146,58 @@ function ensureShopPageActive() {
 // Call the function to handle Shop page behavior
 ensureShopPageActive();
 
-// Function to ensure .is-active is not removed on the About page
+// About Page Navigation – Hover In/Out 
 function ensureAboutPageActive() {
   if (window.location.pathname.includes("about")) {
-    $(".navigation").addClass("is-blue"); // Add .is-active when on the About page
+    // Add 'is-blue' class to the navigation
+    $(".navigation").addClass("is-blue");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).css("background-color", "#b9d5e6");
+    });
+
+    // Handle hover state for .navigation
     $(".navigation").hover(
       function () {
-        $(this).addClass("is-blue"); // Add the class on hover
+        $(this).addClass("is-blue");
       },
       function () {
-        // Do nothing on hover out for Shop page
+        // Do nothing on hover out
       }
     );
   }
 }
 
-// Call the function to handle Shop page behavior
+// Call the function to handle About page behavior
 ensureAboutPageActive();
 
-// Function to ensure .is-active is not removed on the About page
-function ensureProductPageActive() {
-  if (window.location.pathname.includes("product")) {
-    $(".navigation").addClass("is-white"); // Add .is-active when on the About page
+// Contact Page Navigation – Hover In/Out 
+function ensureContactPageActive() {
+  if (window.location.pathname.includes("contact")) {
+    // Add 'is-blue' class to the navigation
+    $(".navigation").addClass("is-green");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).css("background-color", "#b9d5e6");
+    });
+
+    // Handle hover state for .navigation
     $(".navigation").hover(
       function () {
-        $(this).addClass("is-white"); // Add the class on hover
+        $(this).addClass("is-green");
       },
       function () {
-        // Do nothing on hover out for Shop page
+        // Do nothing on hover out
       }
     );
   }
 }
 
-// Call the function to handle Shop page behavior
-ensureProductPageActive();
+// Call the function to handle About page behavior
+ensureContactPageActive();
+
 
 
 // Manage the scroll-triggered .is-active state
@@ -341,7 +358,7 @@ splitTextTimeline.from(split.words, {
 });
 
 // GSAP Split Text
-// Create SplitText animation for Footer Logo
+// All Pages – Footer Logo SplitText
 const footerSplitTextTimeline = gsap.timeline({
   paused: true, // Keeps the timeline paused initially
   scrollTrigger: {
@@ -388,7 +405,7 @@ gsap.fromTo(
 );
 
 // GSAP Split Text
-// About Page - Brand Text In
+// About Page - Our Brand Text In
 const brandSplit = new SplitText(".brand-scroll-text", { type: "chars, words" });
 
 // ScrollTrigger animation
@@ -412,7 +429,7 @@ gsap.fromTo(
 );
 
 // GSAP Split Text
-// Loader Animation – Shop Hero Text
+// Shop Page Loader Animation – Shop Hero Text
 const shopSplitTextTimeline = gsap.timeline({ paused: true });
 const shopSplit = new SplitText("#shop-hero", { type: "lines" });
 
@@ -502,6 +519,45 @@ featureAnimation.fromTo(
 );
 
 
+// Text Link Underline Animation – Hover In/Out
+// Initialize on page load
+$(".text-link.w--current .text-link_line").each(function () {
+  gsap.set($(this), { x: "0%" });
+});
+
+// Text Link – Hover In/Out
+$(".text-link").hover(
+  function () {
+    const $line = $(this).find(".text-link_line");
+
+    // Kill any ongoing animations on hover in
+    gsap.killTweensOf($line);
+
+    if ($(this).hasClass("w--current")) {
+      // Hover in for .w--current: Move to 101%
+      gsap.to($line, { x: "101%", duration: 0.5, ease: "power2.out" });
+      gsap.to($line, { x: "-101%", duration: 0.01, }, ">");
+      gsap.to($line, { x: "0%", duration: 0.5, ease: "power2.out" }, ">");
+
+    } else {
+      // Standard hover in: Reset x to -101%, then animate to 0%
+      gsap.to($line, { x: "0%", duration: 0.5, ease: "power2.out" });
+      gsap.to($line, { x: "100%", duration: 0.5, ease: "power2.out" }, ">");
+      gsap.to($line, { x: "-101%", duration: 0, }, ">");
+    }
+  },
+  function () {
+    const $line = $(this).find(".text-link_line");
+
+    if ($(this).hasClass("w--current")) {
+      // Hover out for .w--current:
+      // No Animation
+    } else {
+      // Standard hover out: Animate to 101%, then reset to -101%
+      // No Animation
+    }
+  }
+);
 
 
 
