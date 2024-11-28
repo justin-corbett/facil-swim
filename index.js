@@ -328,13 +328,13 @@ $('.input-minus').click(function() {
 })
 
 // GSAP Split Text
-// Loader Animation – Page Hero Text
+// Home Loader Animation – Home Page Hero Text
 const splitTextTimeline = gsap.timeline({ paused: true });
 const split = new SplitText("#hero", { type: "words" });
 
 splitTextTimeline.from(split.words, {
   duration: 1,
-  y: 100,
+  y: "6rem",
   autoAlpha: 0,
   stagger: 0.05,
   ease: "power2.out"
@@ -364,7 +364,7 @@ footerSplitTextTimeline.from(footerSplit.chars, {
 });
 
 // GSAP Split Text
-// Create about text fade in while scrolling
+// About Page - About Us Text In
 const aboutSplit = new SplitText(".about-scroll-text", { type: "chars, words" });
 
 // ScrollTrigger animation
@@ -388,30 +388,129 @@ gsap.fromTo(
 );
 
 // GSAP Split Text
+// About Page - Brand Text In
+const brandSplit = new SplitText(".brand-scroll-text", { type: "chars, words" });
+
+// ScrollTrigger animation
+gsap.fromTo(
+  brandSplit.chars,
+  {
+    opacity: 0.3,  // Starting opacity
+  },
+  {
+    opacity: 1,  // Ending opacity
+    duration: 2,  // Adjust for smoothness
+    stagger: 0.05,  // Delays between character animations
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: ".brand-scroll-text", // Element to trigger the animation
+      start: "top 80%", // Start when top of element hits 80% of viewport
+      end: "bottom 20%", // End when bottom of element hits 20% of viewport
+      scrub: true, // Smooth scrubbing effect
+    },
+  }
+);
+
+// GSAP Split Text
 // Loader Animation – Shop Hero Text
 const shopSplitTextTimeline = gsap.timeline({ paused: true });
 const shopSplit = new SplitText("#shop-hero", { type: "lines" });
 
 shopSplitTextTimeline.from(shopSplit.lines, {
   duration: 1,
-  y: 100,
+  y: "5rem",
   autoAlpha: 0,
   stagger: 0.05,
   ease: "power2.out"
 });
 
 // GSAP Split Text
-// Loader Animation – Product Page Description
+// Prodcut Page Loader Animation – Description
 const productDescriptionSplitText = gsap.timeline({ paused: true });
 const productDescriptionSplit = new SplitText(".product-description", { type: "lines" });
 
 productDescriptionSplitText.from(productDescriptionSplit.lines, {
-  duration: 1,
-  y: 100,
+  duration: 0.5,
+  y: "1.125rem",
   autoAlpha: 0,
   stagger: 0.05,
   ease: "power2.out"
 });
+
+// GSAP Split Text
+// Product Page Loader Animation – Title
+const productTitleSplitText = gsap.timeline({ paused: true });
+const productTitleSplit = new SplitText("#product-title", { type: "chars" });
+
+productTitleSplitText.from(productTitleSplit.chars, {
+  duration: 0.5,
+  y: "3rem",
+  autoAlpha: 0,
+  stagger: 0.02,
+  ease: "power2.out"
+});
+
+// Product Price – Remove Unwanted Spaces
+setTimeout(() => {
+  document.querySelectorAll('.product-price').forEach(element => {
+    element.textContent = element.textContent.replace(/\s/, ''); // Removes the first space only
+  });
+}, 2000); // Delay of 2 seconds
+
+
+// Prodcut Page – Footer Scroll In, Bottom Nav Scroll Out
+gsap.to(".product-nav-bottom", {
+  y: "100%", // Moves it down by 100% of its height
+  ease: "power2.inOut",
+  scrollTrigger: {
+    trigger: ".footer",
+    start: "top bottom", // When the top of .footer hits the bottom of the viewport
+    toggleActions: "play reverse play reverse", // Play on enter, reverse on leave
+  }
+});
+
+// Prodcut Page Loader – Tags
+const tags = gsap.utils.toArray(".product-tag-wrap .tag");
+
+const tagAnimation = gsap.timeline({ paused: true });
+
+tagAnimation.fromTo(
+  tags,
+  { opacity: 0 },
+  {
+    opacity: 1,
+    duration: 0.5,
+    stagger: 0.05,
+    ease: "power2.out"
+  }
+);
+
+// Prodcut Page Loader – Tiny Text
+const feature = gsap.utils.toArray(".product-feature-wrap .product-feature");
+
+const featureAnimation = gsap.timeline({ paused: true });
+
+featureAnimation.fromTo(
+  feature,
+  { opacity: 0 },
+  {
+    opacity: 1,
+    duration: 0.5,
+    stagger: 0.05,
+    ease: "power2.out"
+  }
+);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
