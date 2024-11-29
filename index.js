@@ -176,17 +176,17 @@ ensureAboutPageActive();
 function ensureContactPageActive() {
   if (window.location.pathname.includes("contact")) {
     // Add 'is-blue' class to the navigation
-    $(".navigation").addClass("is-green");
+    $(".navigation").addClass("is-blue");
     
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
-      $(this).css("background-color", "#b9d5e6");
+      $(this).css("background-color", "#ffffff");
     });
 
     // Handle hover state for .navigation
     $(".navigation").hover(
       function () {
-        $(this).addClass("is-green");
+        $(this).addClass("is-blue");
       },
       function () {
         // Do nothing on hover out
@@ -198,7 +198,31 @@ function ensureContactPageActive() {
 // Call the function to handle About page behavior
 ensureContactPageActive();
 
+// Product Page Navigation – Hover In/Out 
+function ensureProductPageActive() {
+  if (window.location.pathname.includes("contact")) {
+    // Add 'is-white' class to the navigation
+    $(".navigation").addClass("is-white");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).css("background-color", "#3e5c8a");
+    });
 
+    // Handle hover state for .navigation
+    $(".navigation").hover(
+      function () {
+        $(this).addClass("is-white");
+      },
+      function () {
+        // Do nothing on hover out
+      }
+    );
+  }
+}
+
+// Call the function to handle About page behavior
+ensureProductPageActive();
 
 // Manage the scroll-triggered .is-active state
 $(".scroll-track.is-home_hero").each(function () {
@@ -248,8 +272,6 @@ document.addEventListener("DOMContentLoaded", function() {
   if (scrollTopButton) {
     const clickEvent = new Event('click');
     scrollTopButton.dispatchEvent(clickEvent);
-    
-    
   }
 });
 
@@ -429,17 +451,47 @@ gsap.fromTo(
 );
 
 // GSAP Split Text
-// Shop Page Loader Animation – Shop Hero Text
-const shopSplitTextTimeline = gsap.timeline({ paused: true });
-const shopSplit = new SplitText("#shop-hero", { type: "lines" });
+// Contact Page - Our Brand Text In
+const contactSplit = new SplitText(".contact-scroll-text", { type: "chars, words" });
 
-shopSplitTextTimeline.from(shopSplit.lines, {
-  duration: 1,
-  y: "5rem",
+// ScrollTrigger animation
+gsap.fromTo(
+  contactSplit.chars,
+  {
+    opacity: 0.3,  // Starting opacity
+  },
+  {
+    opacity: 1,  // Ending opacity
+    duration: 2,  // Adjust for smoothness
+    stagger: 0.05,  // Delays between character animations
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: ".contact-scroll-text", // Element to trigger the animation
+      start: "top 50%", // Start when top of element hits 80% of viewport
+      end: "bottom 15%", // End when bottom of element hits 20% of viewport
+      scrub: true, // Smooth scrubbing effect
+    },
+  }
+);
+
+// GSAP Split Text
+// All Pages Loader Animation – Page Title
+const pageTitleSplitText = gsap.timeline({ paused: true });
+const pageTitleSplit = new SplitText("#page-title", { type: "lines" });
+
+pageTitleSplitText.from(pageTitleSplit.lines, {
+  duration: 0.5,
+  y: "3rem",
   autoAlpha: 0,
-  stagger: 0.05,
+  stagger: 0.02,
   ease: "power2.out"
 });
+
+
+
+
+
+
 
 // GSAP Split Text
 // Prodcut Page Loader Animation – Description
