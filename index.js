@@ -82,6 +82,8 @@ $(".scroll-track.is-home_hero").each(function (index) {
   let imageLeft = $(".hero-image_left");
   let imageRight = $(".hero-image_right");
   let imageCenter = $(".hero-image_center");
+  let heroContent = $(".home-hero-content-wrapper");
+
 
   let tl = gsap.timeline({
     scrollTrigger: {
@@ -107,6 +109,13 @@ $(".scroll-track.is-home_hero").each(function (index) {
   // Animate the center image
   tl.to(imageCenter, {
     y: "-15vh",
+    duration: 1,
+  }, "<"); 
+
+  // Animate the center image
+  tl.to(heroContent, {
+    y: "-30vh",
+    filter: "blur(5px)",
     duration: 1,
   }, "<"); 
 });
@@ -176,17 +185,17 @@ ensureAboutPageActive();
 function ensureContactPageActive() {
   if (window.location.pathname.includes("contact")) {
     // Add 'is-blue' class to the navigation
-    $(".navigation").addClass("is-blue");
+    $(".navigation").addClass("is-green");
     
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
-      $(this).css("background-color", "#ffffff");
+      $(this).css("background-color", "#b9d5e6");
     });
 
     // Handle hover state for .navigation
     $(".navigation").hover(
       function () {
-        $(this).addClass("is-blue");
+        $(this).addClass("is-green");
       },
       function () {
         // Do nothing on hover out
@@ -200,7 +209,7 @@ ensureContactPageActive();
 
 // Product Page Navigation – Hover In/Out 
 function ensureProductPageActive() {
-  if (window.location.pathname.includes("contact")) {
+  if (window.location.pathname.includes("product")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-white");
     
@@ -223,6 +232,32 @@ function ensureProductPageActive() {
 
 // Call the function to handle About page behavior
 ensureProductPageActive();
+
+// Info Page Navigation – Hover In/Out 
+function ensureInfoPageActive() {
+  if (window.location.pathname.includes("info")) {
+    // Add 'is-white' class to the navigation
+    $(".navigation").addClass("is-green");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).css("background-color", "#b9d5e6");
+    });
+
+    // Handle hover state for .navigation
+    $(".navigation").hover(
+      function () {
+        $(this).addClass("is-green");
+      },
+      function () {
+        // Do nothing on hover out
+      }
+    );
+  }
+}
+
+// Call the function to handle About page behavior
+ensureInfoPageActive();
 
 // Manage the scroll-triggered .is-active state
 $(".scroll-track.is-home_hero").each(function () {
@@ -336,23 +371,6 @@ $(".btn_wrap").each(function (index, btnWrap) {
 });
 
 
-// Swiper Slider
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-document.addEventListener('DOMContentLoaded', () => {
-  const swiper = new Swiper('.swiper-marquee', {
-    slidesPerView: 'auto',
-    spaceBetween: '1.5rem',
-    loop: true,
-    speed: 4000,
-    allowTouchMove: false,
-    autoplay: prefersReducedMotion ? false : {
-      delay: 1,
-      disableOnInteraction: false,
-    },
-  });
-});
-
 // Product Page + - Buttons
 $('.input-plus').click(function() {
   var $input = $(this).parents('.quantity-wrap').find('.input-number');
@@ -365,6 +383,7 @@ $('.input-minus').click(function() {
   var val = parseInt($input.val(), 10);
   $input.val(Math.max(val - 1, 1));
 })
+
 
 // GSAP Split Text
 // Home Loader Animation – Home Page Hero Text
@@ -483,7 +502,21 @@ pageTitleSplitText.from(pageTitleSplit.lines, {
   duration: 0.5,
   y: "3rem",
   autoAlpha: 0,
-  stagger: 0.02,
+  stagger: 0.05,
+  ease: "power2.out"
+});
+
+// GSAP Split Text
+// All Pages Loader Animation – Text Secondary
+const pageSecondarySplitText = gsap.timeline({ paused: true });
+const pageSecondarySplit = new SplitText("#animate-secondary", { type: "lines" });
+
+pageSecondarySplitText.from(pageSecondarySplit.lines, {
+  duration: 0.5,
+  y: "1rem",
+  delay: 0.2,
+  autoAlpha: 0,
+  stagger: 0.05,
   ease: "power2.out"
 });
 
@@ -572,44 +605,427 @@ featureAnimation.fromTo(
 
 
 // Text Link Underline Animation – Hover In/Out
-// Initialize on page load
-$(".text-link.w--current .text-link_line").each(function () {
-  gsap.set($(this), { x: "0%" });
+// Function to handle the animations
+function handleTextLinkAnimation($element) {
+  const $line = $element.find(".text-link_line");
+
+  // Remove existing hover handlers to avoid duplication
+  $element.off("mouseenter mouseleave");
+
+  // Check if the element has the .w--current or .is-alternate class
+  if ($element.hasClass("w--current") || $element.hasClass("is-alternate")) {
+    // Reset x to 0% for the initial state
+    gsap.set($line, { x: "0%" });
+
+    // Add hover in and out animations
+    $element.hover(
+      function () {
+        gsap.killTweensOf($line);
+        gsap.to($line, { x: "101%", duration: 0.5, ease: "power2.out" });
+        gsap.to($line, { x: "-101%", duration: 0.01 }, ">");
+        gsap.to($line, { x: "0%", duration: 0.5, ease: "power2.out" }, ">");
+      },
+      function () {
+        // No animation on hover out for .w--current or .is-alternate
+      }
+    );
+  } else {
+    // For standard links
+    $element.hover(
+      function () {
+        gsap.killTweensOf($line);
+        gsap.to($line, { x: "0%", duration: 0.5, ease: "power2.out" });
+        gsap.to($line, { x: "101%", duration: 0.5, ease: "power2.out" }, ">");
+        gsap.to($line, { x: "-101%", duration: 0 }, ">");
+      },
+      function () {
+        // No animation on hover out
+      }
+    );
+
+    // Reset the line to a non-current state
+    gsap.set($line, { x: "-101%" });
+  }
+}
+
+// Initialize animations for existing links
+$(".text-link").each(function () {
+  handleTextLinkAnimation($(this));
 });
 
-// Text Link – Hover In/Out
-$(".text-link").hover(
-  function () {
-    const $line = $(this).find(".text-link_line");
+// MutationObserver to listen for class changes
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.type === "attributes" && mutation.attributeName === "class") {
+      const target = $(mutation.target);
 
-    // Kill any ongoing animations on hover in
-    gsap.killTweensOf($line);
+      // Detect whether .w--current or .is-alternate was added or removed
+      const oldClasses = mutation.oldValue || "";
+      const hadCurrentOrAlternate =
+        oldClasses.includes("w--current") || oldClasses.includes("is-alternate");
+      const hasCurrentOrAlternate =
+        target.hasClass("w--current") || target.hasClass("is-alternate");
 
-    if ($(this).hasClass("w--current")) {
-      // Hover in for .w--current: Move to 101%
-      gsap.to($line, { x: "101%", duration: 0.5, ease: "power2.out" });
-      gsap.to($line, { x: "-101%", duration: 0.01, }, ">");
-      gsap.to($line, { x: "0%", duration: 0.5, ease: "power2.out" }, ">");
+      if (hadCurrentOrAlternate !== hasCurrentOrAlternate) {
+        // Log the change for debugging
+        console.log(
+          `.w--current or .is-alternate ${
+            hasCurrentOrAlternate ? "added" : "removed"
+          } on element:`,
+          mutation.target
+        );
 
-    } else {
-      // Standard hover in: Reset x to -101%, then animate to 0%
-      gsap.to($line, { x: "0%", duration: 0.5, ease: "power2.out" });
-      gsap.to($line, { x: "100%", duration: 0.5, ease: "power2.out" }, ">");
-      gsap.to($line, { x: "-101%", duration: 0, }, ">");
+        // Reapply the appropriate animation logic
+        handleTextLinkAnimation(target);
+      }
     }
-  },
-  function () {
-    const $line = $(this).find(".text-link_line");
+  });
+});
 
-    if ($(this).hasClass("w--current")) {
-      // Hover out for .w--current:
-      // No Animation
-    } else {
-      // Standard hover out: Animate to 101%, then reset to -101%
-      // No Animation
-    }
+// Start observing the links for class changes
+$(".text-link").each(function () {
+  observer.observe(this, {
+    attributes: true,
+    attributeFilter: ["class"],
+    attributeOldValue: true, // Include the old class list
+  });
+});
+
+
+
+// Copy To Clipboard
+$(".text-link.is-email").on("click", function (e) {
+  e.preventDefault(); // Prevent default behavior if it's a link
+
+  // Disable the click temporarily
+  const $this = $(this);
+  $this.css("pointer-events", "none");
+
+  // Find the .text-link_p within the clicked .text-link
+  const textElement = $this.find(".text-link_p");
+  const originalText = textElement.text(); // Store the original text
+
+  // Copy the text to the clipboard
+  const tempTextarea = $("<textarea>");
+  $("body").append(tempTextarea);
+  tempTextarea.val(originalText).select();
+  document.execCommand("copy");
+  tempTextarea.remove(); // Clean up the temporary textarea
+
+  // Update text to "Copied to clipboard"
+  textElement.text("Email copied 🌞");
+
+  // Revert text and enable clicks after 2 seconds
+  setTimeout(function () {
+    textElement.text(originalText);
+    $this.css("pointer-events", ""); // Re-enable clicks
+  }, 2000);
+});
+
+// Contact Page – Checkbox Label Colour Change On Selected
+// Select all checkboxes with the class '.checkbox'
+document.querySelectorAll('.radio_field').forEach(component => {
+  // Select the .w-checkbox-input element within each component
+  const checkboxInput = component.querySelector('.w-form-formradioinput');
+  const textCheckbox = component.querySelector('.radio_label');
+
+  if (checkboxInput && textCheckbox) {
+    // Create a MutationObserver to watch for class changes
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        if (mutation.attributeName === 'class') {
+          // Check if the class 'w--redirected-checked' is present
+          if (checkboxInput.classList.contains('w--redirected-checked')) {
+            textCheckbox.style.color = '#475e3d'; // Change color to black
+          } else {
+            textCheckbox.style.color = ''; // Reset color
+          }
+        }
+      });
+    });
+
+    // Observe class attribute changes on the checkbox input
+    observer.observe(checkboxInput, { attributes: true });
   }
-);
+});
+
+// Contat Page – Auto Select Field General Enquiry
+window.onload = function() {
+  setTimeout(() => {
+    const select = document.getElementById("configure-select");
+    select.selectedIndex = 0; // Ensure first option is selected
+
+    // Trigger the change event
+    const changeEvent = new Event("change");
+    select.dispatchEvent(changeEvent);
+  }, 1000);
+};
+
+
+// All Pages – Form Submit Button Text Update On Submit
+document.addEventListener('DOMContentLoaded', function () {
+  // Add an event listener for form submission
+  document.querySelectorAll('.form.is-contact').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      // Find all elements inside the form with the class 'text-button'
+      const textButtons = form.querySelectorAll('.text-button');
+      
+      // Update the text content of each '.text-button' element
+      textButtons.forEach(button => {
+        button.textContent = 'Please wait...';
+      });
+
+      // Optional: Revert the text if submission takes too long
+      setTimeout(() => {
+        textButtons.forEach(button => {
+          button.textContent = 'Submit'; // Adjust text as needed
+        });
+      }, 5000); // Adjust delay as needed
+    });
+  });
+});
+
+// All Pages – Form Submit Button Text Update On Submit
+document.addEventListener('DOMContentLoaded', function () {
+  // Add an event listener for form submission
+  document.querySelectorAll('.form.is-subscribe').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      // Find all elements inside the form with the class 'text-button'
+      const textButtons = form.querySelectorAll('.text-button');
+      
+      // Update the text content of each '.text-button' element
+      textButtons.forEach(button => {
+        button.textContent = 'Subscribing...';
+      });
+
+      // Optional: Revert the text if submission takes too long
+      setTimeout(() => {
+        textButtons.forEach(button => {
+          button.textContent = 'Submit'; // Adjust text as needed
+        });
+      }, 5000); // Adjust delay as needed
+    });
+  });
+});
+
+// Product Page – Add To Cart Button Text Update On Submit
+document.addEventListener('DOMContentLoaded', function () {
+  // Add an event listener for form submission
+  document.querySelectorAll('.w-commerce-commerceaddtocartform').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      // Find all elements inside the form with the class 'text-button'
+      const textButtons = form.querySelectorAll('.text-button');
+      
+      // Update the text content of each '.text-button' element
+      textButtons.forEach(button => {
+        button.textContent = 'Adding...';
+      });
+
+      // Optional: Revert the text if submission takes too long
+      setTimeout(() => {
+        textButtons.forEach(button => {
+          button.textContent = 'Add to bag'; // Adjust text as needed
+        });
+      }, 1000); // Adjust delay as needed
+    });
+  });
+});
+
+
+// Cart Open – Stop Lenis scrolling on cart button click
+document.querySelector('.cart-button-open').addEventListener('click', () => {
+  lenis.stop(); // Stop Lenis scrolling
+});
+
+document.querySelector('.cart-button-close').addEventListener('click', () => {
+  lenis.start(); // Stop Lenis scrolling
+});
+
+document.querySelector('.w-commerce-commercecartcontainerwrapper').addEventListener('click', () => {
+  lenis.start(); // Start Lenis scrolling
+});
+
+// GSAP Infinite Marquee
+// Main initialization function
+const init = () => {
+  // Select the marquee element using the custom attribute 'fs-data="marquee"'
+  const marquee = document.querySelector('[fs-data="marquee"]');
+  if (!marquee) {
+    // Exit if the marquee element is not found
+    return;
+  }
+
+  // Get the duration attribute from the marquee or default to 20 seconds
+  const duration = parseInt(marquee.getAttribute("duration"), 10) || 20;
+
+  // Get the first child of the marquee (assumed to be the marquee content)
+  const marqueeContent = marquee.firstChild;
+  if (!marqueeContent) {
+    // Exit if the marquee content is not found
+    return;
+  }
+
+  // Clone the marquee content to create the looping effect
+  const marqueeContentClone = marqueeContent.cloneNode(true);
+  marquee.append(marqueeContentClone); // Append the cloned content to the marquee
+
+  let tween; // Placeholder for the GSAP tween animation
+
+  // Function to initialize and play the marquee animation
+  const playMarquee = () => {
+    // Skip initialization if the marquee or its parent is hidden
+    if (getComputedStyle(marquee).display === 'none') return;
+
+    // If a tween already exists, get its current progress
+    let progress = tween ? tween.progress() : 0;
+
+    // Kill the existing tween and reset progress to avoid duplicate animations
+    tween && tween.progress(0).kill();
+
+    // Calculate the width of the marquee content
+    const width = parseInt(
+      getComputedStyle(marqueeContent).getPropertyValue("width"),
+      10
+    );
+
+    // Calculate the gap between columns (if defined in CSS)
+    const gap = parseInt(
+      getComputedStyle(marqueeContent).getPropertyValue("column-gap"),
+      10
+    );
+
+    // Calculate the total distance to translate (negative for leftward scrolling)
+    const distanceToTranslate = -1 * (gap + width);
+
+    // Create a GSAP tween animation for the marquee
+    tween = gsap.fromTo(
+      marquee.children, // Target all children of the marquee (original and clone)
+      { x: 0 }, // Start at x: 0 (no translation)
+      { x: distanceToTranslate, duration, ease: "none", repeat: -1 } // Translate left with infinite repeat
+    );
+
+    // Set the progress of the new tween to match the previous progress
+    tween.progress(progress);
+
+    // Log the width of the marquee content for debugging purposes
+    console.log({ width });
+  };
+
+  // Call the function to start the marquee animation
+  playMarquee();
+
+  // Utility function to debounce events (like resize) to prevent excessive calls
+  function debounce(func) {
+    var timer;
+    return function (event) {
+      if (timer) clearTimeout(timer); // Clear existing timer
+      timer = setTimeout(
+        () => {
+          func(); // Call the debounced function
+        },
+        500, // Delay in milliseconds
+        event
+      );
+    };
+  }
+
+  // Attach a debounced resize event listener to restart the animation on resize
+  window.addEventListener("resize", debounce(playMarquee));
+
+  // Watch for changes in visibility of the banner-wrap or its parents
+  const bannerWrap = marquee.closest('.banner-wrap');
+  const observer = new MutationObserver(() => {
+    if (getComputedStyle(bannerWrap).display !== 'none') {
+      playMarquee(); // Recalculate and play the marquee when it becomes visible
+    }
+  });
+
+  // Observe visibility changes on the banner-wrap element
+  observer.observe(bannerWrap, { attributes: true, childList: false, subtree: false });
+};
+
+// Run the initialization function once the DOM content is fully loaded
+document.addEventListener("DOMContentLoaded", init);
+
+
+
+/*
+// Remove # from page URL
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if there's a hash in the URL
+    if (window.location.hash) {
+        // Get the target element
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            // Scroll to the target element
+            targetElement.scrollIntoView({behavior: 'smooth'});
+
+            // Remove the hash after a short delay (to allow scrolling to complete)
+            setTimeout(function() {
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+            }, 100);
+        }
+    }
+
+    // Add click event listeners to all internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                targetElement.scrollIntoView({behavior: 'smooth'});
+
+                // Remove the hash after a short delay (to allow scrolling to complete)
+                setTimeout(function() {
+                    history.pushState("", document.title, window.location.pathname + window.location.search);
+                }, 100);
+            }
+        });
+    });
+});
+*/
+
+
+// when the DOM is ready
+$(document).ready(function() {
+  // get the anchor link buttons
+  const menuBtn = $('.text-link.is-info-sticky_nav');
+  // when each button is clicked
+  menuBtn.click(()=>{	
+    // set a short timeout before taking action
+    // so as to allow hash to be set
+    setTimeout(()=>{
+      // call removeHash function after set timeout
+      removeHash();
+    }, 1); // 5 millisecond timeout in this case
+  });
+
+  // removeHash function
+  // uses HTML5 history API to manipulate the location bar
+  function removeHash(){
+    history.replaceState('', document.title, window.location.origin + window.location.pathname + window.location.search);
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
