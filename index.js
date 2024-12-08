@@ -76,6 +76,50 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   });
 });
 
+
+// Home – Navigation
+$(".navigation").hover(
+  function () {
+    // Add the .is-active class to .navigation and .text-link_line.is-nav on hover
+    $(this).addClass("is-white");
+    $(".text-link_line.is-nav").addClass("is-active");
+  },
+  function () {
+    // Remove the .is-active class on hover out only if it wasn't already there due to scroll trigger
+    if (!$(this).is(":hover")) {
+      let hasScrollTriggered = $(this).data("scroll-triggered") === true;
+      if (!hasScrollTriggered) {
+        $(this).removeClass("is-white");
+        $(".text-link_line.is-nav").removeClass("is-active");
+      }
+    }
+  }
+);
+
+// Manage the scroll-triggered .is-active state
+$(".scroll-track.is-home_hero").each(function () {
+  let triggerElement = $(this);
+  let targetElement = $(".navigation");
+
+  ScrollTrigger.create({
+    trigger: triggerElement,
+    start: "25% top",
+    end: "25% top",
+    scrub: 1,
+    onEnter: () => {
+      targetElement.addClass("is-white");
+      targetElement.data("scroll-triggered", true); // Mark as triggered
+      $(".text-link_line.is-nav").addClass("is-active");
+    },
+    onLeaveBack: () => {
+      targetElement.removeClass("is-white");
+      targetElement.data("scroll-triggered", false); // Unmark as triggered
+      $(".text-link_line.is-nav").removeClass("is-active");
+    },
+  });
+});
+
+
 // Home Page – Hero Images Scroll Up
 $(".scroll-track.is-home_hero").each(function (index) {
   let triggerElement = $(this);
@@ -120,22 +164,6 @@ $(".scroll-track.is-home_hero").each(function (index) {
   }, "<"); 
 });
 
-// Home Page Navigation – Hover In/Out
-$(".navigation").hover(
-  function () {
-    // Add the class .is-active on hover
-    $(this).addClass("is-white");
-  },
-  function () {
-    // Only remove the class .is-active on hover out if it's the homepage
-    if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-      let hasScrollTriggered = $(this).data("scroll-triggered") === true;
-      if (!hasScrollTriggered) {
-        $(this).removeClass("is-white");
-      }
-    }
-  }
-);
 
 // Shop Page Navigation – Hover In/Out 
 function ensureShopPageActive() {
