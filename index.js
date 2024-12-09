@@ -78,25 +78,30 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
 
 
 // Home – Navigation
-$(".navigation").hover(
-  function () {
-    // Add the .is-active class to .navigation and .text-link_line.is-nav on hover
-    $(this).addClass("is-white");
-    $(".text-link_line.is-nav").addClass("is-active");
-  },
-  function () {
-    // Remove the .is-active class on hover out only if it wasn't already there due to scroll trigger
-    if (!$(this).is(":hover")) {
-      let hasScrollTriggered = $(this).data("scroll-triggered") === true;
-      if (!hasScrollTriggered) {
-        $(this).removeClass("is-white");
-        $(".text-link_line.is-nav").removeClass("is-active");
+// Check if the current page is the homepage
+if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+  $(".navigation").hover(
+    function () {
+      // Add the .is-active class to .navigation and .text-link_line.is-nav on hover
+      $(this).addClass("is-white");
+      $(".text-link_line.is-nav").addClass("is-blue");
+    },
+    function () {
+      // Remove the .is-active class on hover out only if it wasn't already there due to scroll trigger
+      if (!$(this).is(":hover")) {
+        let hasScrollTriggered = $(this).data("scroll-triggered") === true;
+        if (!hasScrollTriggered) {
+          $(this).removeClass("is-white");
+          $(".text-link_line.is-nav").removeClass("is-blue");
+        }
       }
     }
-  }
-);
+  );
+}
 
-// Manage the scroll-triggered .is-active state
+
+// Home – Navigation
+// Manage the scroll-triggered .is-white state
 $(".scroll-track.is-home_hero").each(function () {
   let triggerElement = $(this);
   let targetElement = $(".navigation");
@@ -109,15 +114,97 @@ $(".scroll-track.is-home_hero").each(function () {
     onEnter: () => {
       targetElement.addClass("is-white");
       targetElement.data("scroll-triggered", true); // Mark as triggered
-      $(".text-link_line.is-nav").addClass("is-active");
+      $(".text-link_line.is-nav").addClass("is-blue");
     },
     onLeaveBack: () => {
       targetElement.removeClass("is-white");
       targetElement.data("scroll-triggered", false); // Unmark as triggered
-      $(".text-link_line.is-nav").removeClass("is-active");
+      $(".text-link_line.is-nav").removeClass("is-blue");
     },
   });
 });
+
+// Home – Navigation – Footer scroll into view
+// Add the .is-green and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+  let footerElement = $(".footer");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: footerElement,
+    start: "top bottom",
+    end: "top bottom",
+    scrub: 1,
+    onEnter: () => {
+      navigationElement.addClass("is-green");
+      navLineElement.removeClass("is-blue");
+      navLineElement.addClass("is-light_blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-green");
+      navLineElement.removeClass("is-light_blue");
+      navLineElement.addClass("is-blue");
+    },
+  });
+}
+
+// Shop – Navigation – Footer scroll into view
+// Add the .is-blue and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname.includes("shop")) {
+  let footerElement = $(".footer");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: footerElement,
+    start: "top bottom",
+    end: "top bottom",
+    scrub: 1,
+    onEnter: () => {
+      
+      navLineElement.removeClass("is-blue");
+      navigationElement.removeClass("is-blue");
+      navigationElement.addClass("is-blue");
+      navLineElement.addClass("is-light_blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-blue");
+      navLineElement.removeClass("is-light_blue");
+      navigationElement.addClass("is-white");
+      navLineElement.addClass("is-blue");
+    },
+  });
+}
+
+// Home Navigation – About – Scroll into view
+// Add the .is-green and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+  let aboutElement = $(".section-about");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: aboutElement,
+    start: "top 12%",
+    end: "top 12%",
+    scrub: 1,
+    onEnter: () => {
+      navigationElement.addClass("is-blue");
+      navLineElement.removeClass("");
+      navLineElement.addClass("is-light_blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-blue");
+      navLineElement.removeClass("is-light_blue");
+      navLineElement.addClass("");
+    },
+  });
+}
+
 
 
 // Home Page – Hero Images Scroll Up
@@ -168,13 +255,21 @@ $(".scroll-track.is-home_hero").each(function (index) {
 // Shop Page Navigation – Hover In/Out 
 function ensureShopPageActive() {
   if (window.location.pathname.includes("shop")) {
-    $(".navigation").addClass("is-white"); // Add .is-active when on the About page
+    // Add 'is-white' class to the navigation
+    $(".navigation").addClass("is-white");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).addClass("is-blue");
+    });
+
+    // Handle hover state for .navigation
     $(".navigation").hover(
       function () {
-        $(this).addClass("is-white"); // Add the class on hover
+        // Do nothing on hover out
       },
       function () {
-        // Do nothing on hover out for Shop page
+        // Do nothing on hover out
       }
     );
   }
@@ -191,7 +286,7 @@ function ensureAboutPageActive() {
     
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
-      $(this).css("background-color", "#b9d5e6");
+      $(this).addClass("is-light_blue");
     });
 
     // Handle hover state for .navigation
@@ -217,7 +312,7 @@ function ensureContactPageActive() {
     
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
-      $(this).css("background-color", "#b9d5e6");
+      $(this).addClass("is-light_blue");
     });
 
     // Handle hover state for .navigation
@@ -243,7 +338,7 @@ function ensureProductPageActive() {
     
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
-      $(this).css("background-color", "#3e5c8a");
+      $(this).addClass("is-blue");
     });
 
     // Handle hover state for .navigation
@@ -269,7 +364,7 @@ function ensureInfoPageActive() {
     
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
-      $(this).css("background-color", "#b9d5e6");
+      $(this).addClass("is-light_blue");
     });
 
     // Handle hover state for .navigation
@@ -542,7 +637,6 @@ const pageSecondarySplit = new SplitText("#animate-secondary", { type: "lines" }
 pageSecondarySplitText.from(pageSecondarySplit.lines, {
   duration: 0.5,
   y: "1rem",
-  delay: 0.2,
   autoAlpha: 0,
   stagger: 0.05,
   ease: "power2.out"
@@ -741,7 +835,7 @@ $(".text-link.is-email").on("click", function (e) {
   tempTextarea.remove(); // Clean up the temporary textarea
 
   // Update text to "Copied to clipboard"
-  textElement.text("Email copied 🌞");
+  textElement.text("email copied 🌞");
 
   // Revert text and enable clicks after 2 seconds
   setTimeout(function () {
@@ -777,16 +871,22 @@ document.querySelectorAll('.radio_field').forEach(component => {
   }
 });
 
-// Contat Page – Auto Select Field General Enquiry
+// Contact Page – Auto Select Field General Enquiry
 window.onload = function() {
-  setTimeout(() => {
-    const select = document.getElementById("configure-select");
-    select.selectedIndex = 0; // Ensure first option is selected
+  if (window.location.pathname.includes("contact")) {
+      setTimeout(() => {
+          const select = document.getElementById("configure-select");
+          if (select) {
+              select.selectedIndex = 0; // Ensure first option is selected
 
-    // Trigger the change event
-    const changeEvent = new Event("change");
-    select.dispatchEvent(changeEvent);
-  }, 1000);
+              // Trigger the change event
+              const changeEvent = new Event("change");
+              select.dispatchEvent(changeEvent);
+          } else {
+              console.error("Element with id 'configure-select' not found.");
+          }
+      }, 1000);
+  }
 };
 
 
@@ -1039,6 +1139,172 @@ $(document).ready(function() {
     history.replaceState('', document.title, window.location.origin + window.location.pathname + window.location.search);
   }
 });
+
+// All pages – Footer calc height minus nav height
+function updateFooterHeight() {
+  const nav = document.querySelector('.navigation'); // Replace '.navigation' with the actual class or ID of your navigation
+  if (nav) {
+      const navHeight = nav.offsetHeight; // Get the current height of the navigation
+      document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
+  }
+}
+
+// Observe changes to the navigation size
+const nav = document.querySelector('.navigation');
+if (nav) {
+  const resizeObserver = new ResizeObserver(() => updateFooterHeight());
+  resizeObserver.observe(nav);
+}
+
+// Run once on page load
+window.addEventListener('load', updateFooterHeight);
+
+
+// Subscribe form custom success message
+// when DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+  // declare constant selectors
+  const FORM_SELECTOR = '[fs-subscribe="form"]';
+  const NAME_INPUT_SELECTOR = '[fs-subscribe="name-input"]';
+  const MESSAGE_SELECTOR = '[fs-subscribe="custom-message"]';
+  const form = document.querySelector(FORM_SELECTOR);
+
+  // early return
+  if (!form) return;
+  const nameInput = form.querySelector(NAME_INPUT_SELECTOR);
+  const messageDiv = document.querySelector(MESSAGE_SELECTOR);
+
+  if (!nameInput || !messageDiv) return;
+
+  // when form is submitted
+  nameInput.addEventListener('input', function () {
+    const nameValue = nameInput.value;
+
+    if (nameValue && nameValue !== '') {
+      messageDiv.innerText = `Thanks for subscribing ${nameValue}!`;
+    } else {
+      messageDiv.innerText = 'Thanks for subscribing!';
+    }
+  });
+});
+
+// Contact form custom success message
+// when DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+  // declare constant selectors
+  const FORM_SELECTOR = '[fs-contact="form"]';
+  const NAME_INPUT_SELECTOR = '[fs-contact="name-input"]';
+  const MESSAGE_SELECTOR = '[fs-contact="custom-message"]';
+  const form = document.querySelector(FORM_SELECTOR);
+
+  // early return
+  if (!form) return;
+  const nameInput = form.querySelector(NAME_INPUT_SELECTOR);
+  const messageDiv = document.querySelector(MESSAGE_SELECTOR);
+
+  if (!nameInput || !messageDiv) return;
+
+  // when form is submitted
+  nameInput.addEventListener('input', function () {
+    const nameValue = nameInput.value;
+
+    if (nameValue && nameValue !== '') {
+      messageDiv.innerText = `Thanks ${nameValue}! We will get back to you within 1-2 business days.`;
+    } else {
+      messageDiv.innerText = 'Thanks, we have received your message and will get back to you.';
+    }
+  });
+});
+
+
+// Webflow section link – add height to top of screen
+  // Disable Webflow's built-in smooth scrolling
+  var Webflow = Webflow || [];
+  Webflow.push(function() {
+    $(function() { 
+      $(document).off('click.wf-scroll');
+    });
+  });
+
+  // Smooth scroll implementation with customizable settings
+  (function() {
+    // Customizable settings
+    const SCROLL_SETTINGS = {
+      duration: 1000, // in milliseconds
+      easing: 'easeInOutCubic' // 'linear', 'easeInQuad', 'easeOutQuad', 'easeInOutQuad', 'easeInCubic', 'easeOutCubic', 'easeInOutCubic'
+    };
+
+    const EASING_FUNCTIONS = {
+      linear: t => t,
+      easeInQuad: t => t * t,
+      easeOutQuad: t => t * (2 - t),
+      easeInOutQuad: t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+      easeInCubic: t => t * t * t,
+      easeOutCubic: t => (--t) * t * t + 1,
+      easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+    };
+
+    function getOffset() {
+      const navbar = document.querySelector('.navigation');
+      if (!navbar) return 0;
+      const navbarHeight = navbar.offsetHeight;
+      const customOffset = parseInt(navbar.getAttribute('.navigation') || '64', 10);
+      return navbarHeight + customOffset;
+    }
+
+    function smoothScroll(target) {
+      const startPosition = window.pageYOffset;
+      const offset = getOffset();
+      const targetPosition = target.getBoundingClientRect().top + startPosition - offset;
+      const distance = targetPosition - startPosition;
+      let startTime = null;
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / SCROLL_SETTINGS.duration, 1);
+        const easeProgress = EASING_FUNCTIONS[SCROLL_SETTINGS.easing](progress);
+        window.scrollTo(0, startPosition + distance * easeProgress);
+        if (timeElapsed < SCROLL_SETTINGS.duration) requestAnimationFrame(animation);
+      }
+
+      requestAnimationFrame(animation);
+    }
+
+    function handleClick(e) {
+      const href = e.currentTarget.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.getElementById(href.slice(1));
+        if (target) smoothScroll(target);
+      }
+    }
+
+    function handleHashChange() {
+      if (window.location.hash) {
+        const target = document.getElementById(window.location.hash.slice(1));
+        if (target) {
+          setTimeout(() => smoothScroll(target), 0);
+        }
+      }
+    }
+
+    function init() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', handleClick);
+      });
+      window.addEventListener('hashchange', handleHashChange);
+      handleHashChange(); // Handle initial hash on page load
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    window.Webflow && window.Webflow.push(init);
+})();
+
+
+
+
+
 
 
 
