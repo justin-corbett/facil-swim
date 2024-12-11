@@ -179,8 +179,34 @@ if (window.location.pathname.includes("shop")) {
   });
 }
 
-// Home Navigation – About – Scroll into view
+// Product Page – Navigation – Footer scroll into view
 // Add the .is-green and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname.includes("product")) {
+  let footerElement = $(".footer");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: footerElement,
+    start: "top bottom",
+    end: "top bottom",
+    scrub: 1,
+    onEnter: () => {
+      navigationElement.addClass("is-blue");
+      navLineElement.addClass("is-light_blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-blue");
+      navLineElement.removeClass("is-light_blue");
+      navigationElement.addClass("is-white");
+      navLineElement.addClass("is-blue");
+    },
+  });
+}
+
+// Home Navigation – About – Scroll into view
+// Add the .is-blue and .is-light_blue classes when .section-about scrolls into view
 // Check if the current page is the homepage
 if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
   let aboutElement = $(".section-about");
@@ -682,17 +708,6 @@ setTimeout(() => {
 }, 2000); // Delay of 2 seconds
 
 
-// Prodcut Page – Footer Scroll In, Bottom Nav Scroll Out
-gsap.to(".product-nav-bottom", {
-  y: "100%", // Moves it down by 100% of its height
-  ease: "power2.inOut",
-  scrollTrigger: {
-    trigger: ".footer",
-    start: "top bottom", // When the top of .footer hits the bottom of the viewport
-    toggleActions: "play reverse play reverse", // Play on enter, reverse on leave
-  }
-});
-
 // Prodcut Page Loader – Tags
 const tags = gsap.utils.toArray(".product-tag-wrap .tag");
 
@@ -957,20 +972,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 1000); // Adjust delay as needed
     });
   });
-});
-
-
-// Cart Open – Stop Lenis scrolling on cart button click
-document.querySelector('.cart-button-open').addEventListener('click', () => {
-  lenis.stop(); // Stop Lenis scrolling
-});
-
-document.querySelector('.cart-button-close').addEventListener('click', () => {
-  lenis.start(); // Stop Lenis scrolling
-});
-
-document.querySelector('.w-commerce-commercecartcontainerwrapper').addEventListener('click', () => {
-  lenis.start(); // Start Lenis scrolling
 });
 
 // GSAP Infinite Marquee
@@ -1304,22 +1305,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+// Cart Open – Observer to check open state and play in/out animation
 
 
 
+// Select the target element to observe
+const cartWrapper = document.querySelector('.w-commerce-commercecartwrapper.cart');
+const cartContainer = document.querySelector('.cart-container');
 
+// Ensure `lenis` is available globally
+if (cartWrapper && cartContainer && typeof lenis !== 'undefined') {
+  // Function to update cart animation and lenis behavior
+  const updateCartBehavior = () => {
+    if (cartWrapper.hasAttribute('data-cart-open')) {
+      // If the attribute is present, animate opacity to 100% and stop Lenis
+      lenis.stop();
+    } else {
+      // If the attribute is not present, animate opacity to 0% and start Lenis
+      lenis.start();
+    }
+  };
 
+  // Create a MutationObserver to observe changes to attributes
+  const observer = new MutationObserver(() => {
+    updateCartBehavior(); // Update behavior on attribute change
+  });
 
+  // Observe the target element for attribute changes
+  observer.observe(cartWrapper, { attributes: true, attributeFilter: ['data-cart-open'] });
 
+  // Initial check to set the correct state
+  updateCartBehavior();
+} else {
+  console.error('One or more elements are missing, or Lenis is not defined.');
+}
 
+// Cart All Pages – Image Hover
+// Hover animation using GSAP
+gsap.utils.toArray('.cart-empty-img-wrap').forEach(wrapper => {
+  // On hover
+  wrapper.addEventListener('mouseenter', () => {
+    gsap.to(wrapper.querySelector('.cart-empty-img'), { 
+      scale: 1, 
+      duration: 0.5, 
+      ease: ""
+    });
+  });
 
-
-
-
-
-
-
-
+  // On hover out
+  wrapper.addEventListener('mouseleave', () => {
+    gsap.to(wrapper.querySelector('.cart-empty-img'), { 
+      scale: 1.1, 
+      duration: 0.5, 
+      ease: ""
+    });
+  });
+});
 
 
 
