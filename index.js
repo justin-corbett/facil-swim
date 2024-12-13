@@ -205,6 +205,60 @@ if (window.location.pathname.includes("product")) {
   });
 }
 
+// Terms and Conditions – Navigation – Footer scroll into view
+// Add the .is-blue and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname.includes("terms-and-conditions")) {
+  let footerElement = $(".footer");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: footerElement,
+    start: "top bottom",
+    end: "top bottom",
+    scrub: 1,
+    onEnter: () => {
+      navigationElement.addClass("is-blue");
+      navLineElement.addClass("is-light_blue");
+      navigationElement.removeClass("is-blue");
+      navLineElement.removeClass("is-blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-blue");
+      navLineElement.removeClass("is-light_blue");
+      navigationElement.addClass("is-grey");
+      navLineElement.addClass("is-blue");
+    },
+  });
+}
+
+// Privacy Policy – Navigation – Footer scroll into view
+// Add the .is-blue and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname.includes("privacy-policy")) {
+  let footerElement = $(".footer");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: footerElement,
+    start: "top bottom",
+    end: "top bottom",
+    scrub: 1,
+    onEnter: () => {
+      navigationElement.addClass("is-blue");
+      navLineElement.addClass("is-light_blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-blue");
+      navLineElement.removeClass("is-light_blue");
+      navigationElement.addClass("is-grey");
+      navLineElement.addClass("is-blue");
+    },
+  });
+}
+
 // Home Navigation – About – Scroll into view
 // Add the .is-blue and .is-light_blue classes when .section-about scrolls into view
 // Check if the current page is the homepage
@@ -276,7 +330,6 @@ $(".scroll-track.is-home_hero").each(function (index) {
     duration: 1,
   }, "<"); 
 });
-
 
 // Shop Page Navigation – Hover In/Out 
 function ensureShopPageActive() {
@@ -407,6 +460,58 @@ function ensureInfoPageActive() {
 
 // Call the function to handle About page behavior
 ensureInfoPageActive();
+
+// Terms Page Navigation – Hover In/Out 
+function ensureTermsPageActive() {
+  if (window.location.pathname.includes("terms-and-conditions")) {
+    // Add 'is-white' class to the navigation
+    $(".navigation").addClass("is-grey");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).addClass("is-blue");
+    });
+
+    // Handle hover state for .navigation
+    $(".navigation").hover(
+      function () {
+        // Do nothing on hover out
+      },
+      function () {
+        // Do nothing on hover out
+      }
+    );
+  }
+}
+
+// Call the function to handle Shop page behavior
+ensureTermsPageActive();
+
+// Privacy Policy Page Navigation – Hover In/Out 
+function ensurePrivacyPageActive() {
+  if (window.location.pathname.includes("privacy-policy")) {
+    // Add 'is-white' class to the navigation
+    $(".navigation").addClass("is-grey");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).addClass("is-blue");
+    });
+
+    // Handle hover state for .navigation
+    $(".navigation").hover(
+      function () {
+        // Do nothing on hover out
+      },
+      function () {
+        // Do nothing on hover out
+      }
+    );
+  }
+}
+
+// Call the function to handle Shop page behavior
+ensurePrivacyPageActive();
 
 // Manage the scroll-triggered .is-active state
 $(".scroll-track.is-home_hero").each(function () {
@@ -1341,26 +1446,30 @@ if (cartWrapper && cartContainer && typeof lenis !== 'undefined') {
 }
 
 // Cart All Pages – Image Hover
-// Hover animation using GSAP
-gsap.utils.toArray('.cart-empty-img-wrap').forEach(wrapper => {
+const wrapper = document.querySelector('.cart-empty-img-wrap');
+const image = wrapper.querySelector('.cart-empty-img');
+const hoverTargets = [wrapper, document.querySelector('.text-link.is-alternate.is-serif')];
+
+hoverTargets.forEach(target => {
   // On hover
-  wrapper.addEventListener('mouseenter', () => {
-    gsap.to(wrapper.querySelector('.cart-empty-img'), { 
+  target.addEventListener('mouseenter', () => {
+    gsap.to(image, { 
       scale: 1, 
       duration: 0.5, 
-      ease: ""
+      ease: "power2.out" // Add a smooth ease
     });
   });
 
   // On hover out
-  wrapper.addEventListener('mouseleave', () => {
-    gsap.to(wrapper.querySelector('.cart-empty-img'), { 
+  target.addEventListener('mouseleave', () => {
+    gsap.to(image, { 
       scale: 1.1, 
       duration: 0.5, 
-      ease: ""
+      ease: "power2.out" // Add a smooth ease
     });
   });
 });
+
 
 
 
