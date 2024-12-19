@@ -128,7 +128,7 @@ $(".scroll-track.is-home_hero").each(function () {
 // Add the .is-green and .is-light_blue classes when .footer scrolls into view
 // Check if the current page is the homepage
 if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-  let footerElement = $(".footer");
+  let footerElement = $(".section-instagram");
   let navigationElement = $(".navigation");
   let navLineElement = $(".text-link_line.is-nav");
 
@@ -154,7 +154,7 @@ if (window.location.pathname === "/" || window.location.pathname === "/index.htm
 // Add the .is-blue and .is-light_blue classes when .footer scrolls into view
 // Check if the current page is the homepage
 if (window.location.pathname.includes("shop")) {
-  let footerElement = $(".footer");
+  let footerElement = $(".section-instagram");
   let navigationElement = $(".navigation");
   let navLineElement = $(".text-link_line.is-nav");
 
@@ -183,7 +183,7 @@ if (window.location.pathname.includes("shop")) {
 // Add the .is-green and .is-light_blue classes when .footer scrolls into view
 // Check if the current page is the homepage
 if (window.location.pathname.includes("product")) {
-  let footerElement = $(".footer");
+  let footerElement = $(".section-instagram");
   let navigationElement = $(".navigation");
   let navLineElement = $(".text-link_line.is-nav");
 
@@ -209,7 +209,7 @@ if (window.location.pathname.includes("product")) {
 // Add the .is-blue and .is-light_blue classes when .footer scrolls into view
 // Check if the current page is the homepage
 if (window.location.pathname.includes("terms-and-conditions")) {
-  let footerElement = $(".footer");
+  let footerElement = $(".section-instagram");
   let navigationElement = $(".navigation");
   let navLineElement = $(".text-link_line.is-nav");
 
@@ -237,7 +237,7 @@ if (window.location.pathname.includes("terms-and-conditions")) {
 // Add the .is-blue and .is-light_blue classes when .footer scrolls into view
 // Check if the current page is the homepage
 if (window.location.pathname.includes("privacy-policy")) {
-  let footerElement = $(".footer");
+  let footerElement = $(".section-instagram");
   let navigationElement = $(".navigation");
   let navLineElement = $(".text-link_line.is-nav");
 
@@ -269,8 +269,8 @@ if (window.location.pathname === "/" || window.location.pathname === "/index.htm
 
   ScrollTrigger.create({
     trigger: aboutElement,
-    start: "top 12%",
-    end: "top 12%",
+    start: "top bottom",
+    end: "top bottom",
     scrub: 1,
     onEnter: () => {
       navigationElement.addClass("is-blue");
@@ -544,6 +544,8 @@ $(".horizontal-rule").each(function (index, element) {
       trigger: triggerElement,
       // trigger element - viewport
       start: "top bottom",
+      end: "bottom top", // Animation ends when the top of the element fully leaves the viewport
+      toggleActions: "play none none reset", // Reset animation when scrolling back up
     },
   });
   tl.from(targetElement, {
@@ -1474,12 +1476,144 @@ hoverTargets.forEach(target => {
 
 
 
+// Follow us section animation
 
+// Function to animate the third grid
+const instagramImages = () => {
+  const track = document.querySelector('.scroll-track.is-instagram');
+  const instagramImages = document.querySelectorAll('.image-instagram');
 
+  gsap.timeline({
+    defaults: {
+      ease: 'power3',
+    },
+    scrollTrigger: {
+      trigger: track,
+      start: 'top center',
+      end: 'bottom center',
+      scrub: 1,
+    }
+  })
+  .from(instagramImages, {
+    stagger: 0.06,
+    y: window.innerHeight,
+    rotation: (index) => index % 2 === 0 ? -15 : 15,
+    transformOrigin: '50% 0%'
+  })
+  .fromTo(instagramImages, {
+    filter: 'brightness(100%)'
+  }, {
+    ease: 'none',
+    stagger: 0.06,
+    filter: pos => pos < instagramImages.length-1 ? 'brightness(20%)' : 'brightness(100%)'
+  }, 0)
+};
 
+instagramImages();
 
+const instagramText = () => {
+  const track = document.querySelector('.scroll-track.is-instagram');
+  const instagramText = document.querySelectorAll('.instagram-text-wrapper');
 
+  gsap.timeline({
+    defaults: {
+      ease: 'power1.inOut',
+    },
+    scrollTrigger: {
+      trigger: track,
+      start: 'top 75%',
+      end: 'bottom 25%',
+      scrub: 0.2,
+    }
+  })
+  .from(instagramText, {
+    x: '100%'
+  })
+};
 
+instagramText();
 
+// Home – Product Item Reveal On Scroll
+// Select all elements with the class .collection-products-item
+const collectionItems = Array.from(document.querySelectorAll(".collection-products-item"));
 
+// Loop through each item and apply the animation
+collectionItems.forEach((item, index) => {
+  gsap.from(item.querySelector(".product_image-wrapper"), {
+    translateY: "50%",
+    autoAlpha: 0,
+    duration: 1,        
+    ease: "power3.out", 
+    delay: (index % 3) * 0.1, // Stagger items within each row (adjust the 3 for your row size)
+    scrollTrigger: {
+      trigger: item,      
+      start: "top bottom", 
+      end: "bottom top",   
+      toggleActions: "play none none reset", 
+    },
+  });
+});
 
+// All Pages – GSAP Split Text – Words
+// Select all elements with the `data-split-words` attribute
+document.addEventListener("DOMContentLoaded", () => {
+  // Delay initialization by 200ms (or any duration you prefer)
+  setTimeout(() => {
+    // Select all elements with the `data-split-words` attribute
+    const elements = document.querySelectorAll("[data-split-words]");
+
+    // Loop through each element and apply SplitText
+    elements.forEach(element => {
+      // Split the text into words
+      const wordSplit = new SplitText(element, { type: "words" });
+
+      // Apply GSAP animation
+      gsap.from(wordSplit.words, {
+        autoAlpha: 0, // Starting opacity
+        translateY: "100%",
+        delay: 0.2, // Delay for animation
+        duration: 1, // Adjust for smoothness
+        stagger: 0.05, // Delays between word animations
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: element, // Use the current element as the trigger
+          start: "top bottom", // Start when the top of the element hits 80% of the viewport
+          end: "bottom top", // Animation ends when the top of the element fully leaves the viewport
+          toggleActions: "play none none reset", // Reset animation when scrolling back up
+        },
+      });
+    });
+  }, 2000); // Adjust delay as needed (200ms in this example)
+});
+
+// All Pages – GSAP Split Text – Lines
+// Select all elements with the `data-split-words` attribute
+document.addEventListener("DOMContentLoaded", () => {
+  // Delay initialization by 200ms (or any duration you prefer)
+  setTimeout(() => {
+    // Select all elements with the `data-split-lines` attribute
+    const elements = document.querySelectorAll("[data-split-lines]");
+
+    // Loop through each element and apply SplitText
+    elements.forEach(element => {
+      // Split the text into words
+      const linesSplit = new SplitText(element, { type: "lines" });
+
+      // Apply GSAP animation
+      gsap.from(linesSplit.lines, {
+        autoAlpha: 0, // Starting opacity
+        translateY: "100%",
+        delay: 0.2, // Delay for animation
+        duration: 1, // Adjust for smoothness
+        stagger: 0.2, // Delays between line animations
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: element, // Use the current element as the trigger
+          start: "top bottom", // Start when the top of the element hits 80% of the viewport
+          end: "bottom top", // Animation ends when the top of the element fully leaves the viewport
+          toggleActions: "play none none reset", // Reset animation when scrolling back up
+        },
+      });
+    });
+  }, 2000); // Adjust delay as needed (200ms in this example)
+});
