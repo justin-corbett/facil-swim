@@ -108,12 +108,16 @@ export class Tooltip {
 
         // Set the innerHTML of the background element in one operation
         this.DOM.bg.innerHTML = strHTML;
+        console.log('Grid created:', { rows: this.rows, cols: this.cols, cells: strHTML });
+
         
         // Set the CSS variables on the tooltip element
         this.DOM.el.style.setProperty('--tt-columns', this.cols);
         this.DOM.el.style.setProperty('--tt-rows', this.rows);
 
         this.DOM.cells =  [...this.DOM.bg.querySelectorAll('div')];
+        console.log('Cells initialized:', this.DOM.cells);
+
     }
 
     /**
@@ -122,6 +126,7 @@ export class Tooltip {
      * @param {MouseEvent} event - The mouse event associated with the toggle action.
      */
     toggle(effectType, event) {
+        console.log('Toggle called:', { effectType, isOpen: this.isOpen });
         // Toggle the state
         this.isOpen = !this.isOpen;
 
@@ -140,6 +145,7 @@ export class Tooltip {
         // Determine the animation based on effectType
         // Construct the method name based on the effectType
         const methodName = `animate${effectType.charAt(0).toUpperCase() + effectType.slice(1)}`;
+        console.log('Animating cells:', { methodName, isMethodDefined: typeof this[methodName] === 'function' });
         // Check if the method exists
         if (typeof this[methodName] === 'function') {
             // Call the dynamically determined method
@@ -157,7 +163,7 @@ export class Tooltip {
      * @param {string} [options.ease='expo'] - Easing function for the animation.
      * @returns {GSAPTimeline} The GSAP timeline object for animations.
      */
-    createDefaultTimeline({ duration = 0.1, ease = 'expo' } = {}) {
+    createDefaultTimeline({ duration = 0.3, ease = 'expo' } = {}) {
         if ( this.tl ) { 
             this.tl.kill();
         }
@@ -173,12 +179,12 @@ export class Tooltip {
                     this.DOM.el.classList.add('tooltip--show');
                 }
                 else {
-                    gsap.set(this.DOM.el, {zIndex: 0});
+                    gsap.set(this.DOM.el, {zIndex: 99999});
                 }
             },
             onComplete: () => {
                 if ( !this.isOpen ) {
-                    this.DOM.el.classList.remove('tooltip--show');
+                     this.DOM.el.classList.add('tooltip--show');
                 }
             }
         });
@@ -205,54 +211,68 @@ export class Tooltip {
     }
 
     /**
-     * Specific animation effects applied to the tooltip cells and content
-     */
-    animateEffect1(event) {
-        
-        this.tl = this.createDefaultTimeline();
-        
-        // Get the mouse position from the event
-        const mousePosition = { x: event.clientX, y: event.clientY };
-        // Calculate the maximum distance as the diagonal of the page
-        const pageWidth = document.documentElement.scrollWidth;
-        const pageHeight = document.documentElement.scrollHeight;
-        const maximumDistance = Math.sqrt(pageWidth * pageWidth + pageHeight * pageHeight);
+ * Specific animation effects applied to the tooltip cells and content
+ */
+animateEffect1(event) {
+    console.log('Effect1 animation triggered:', { event, isOpen: this.isOpen });
+    console.log('Cells array:', this.DOM.cells);
+    console.log('Is array:', Array.isArray(this.DOM.cells));
 
-        // Define the maximum delay you want to apply to any cell
-        const maximumDelay = 1.8;
+    this.tl = this.createDefaultTimeline();
+    
+    // Get the mouse position from the event
+    const mousePosition = { x: event.clientX, y: event.clientY };
+    console.log('Mouse position:', mousePosition);
 
-        // Calculate the delay for each cell based on its distance from the mouse position
-        this.DOM.cells.forEach(cell => {
-            // Get the position of the cell
-            const cellRect = cell.getBoundingClientRect();
-            const cellPosition = { x: cellRect.left, y: cellRect.top };
+    // Calculate the maximum distance as the diagonal of the page
+    const pageWidth = document.documentElement.scrollWidth;
+    const pageHeight = document.documentElement.scrollHeight;
+    const maximumDistance = Math.sqrt(pageWidth * pageWidth + pageHeight * pageHeight);
 
-            // Calculate the distance from the cell to the mouse position
-            const distance = Math.sqrt(Math.pow(cellPosition.x - mousePosition.x, 2) + Math.pow(cellPosition.y - mousePosition.y, 2));
+    console.log('Maximum distance:', maximumDistance);
 
-            // Convert distance to a delay, for example by inverting and scaling the distance
-            // This is where you can get creative with how the distance affects the delay
-            const delay = (distance / maximumDistance) * maximumDelay;
+    // Define the maximum delay you want to apply to any cell
+    const maximumDelay = 1.8;
 
-            // Apply the animation with the calculated delay
-            if ( this.isOpen ) {
-                this.tl.fromTo(cell, {
-                    opacity: 0
-                }, {
-                    opacity: 1,
-                    delay: delay, // Use the calculated delay here
-                }, 0);
-            }
-            else {
-                this.tl.to(cell, {
-                    opacity: 0,
-                    delay: delay, // Use the calculated delay here
-                }, 0);
-            }
-        });
+    // Calculate the delay for each cell based on its distance from the mouse position
+    this.DOM.cells.forEach((cell, index) => { // Add 'index' here
+        console.log(`Processing cell #${index}`, cell);
 
-        this.animateTooltipContent();
-    }
+        // Get the position of the cell
+        const cellRect = cell.getBoundingClientRect();
+        const cellPosition = { x: cellRect.left, y: cellRect.top };
+
+        // Calculate the distance from the cell to the mouse position
+        const distance = Math.sqrt(
+            Math.pow(cellPosition.x - mousePosition.x, 2) +
+            Math.pow(cellPosition.y - mousePosition.y, 2)
+        );
+
+        // Convert distance to a delay, for example by inverting and scaling the distance
+        const delay = (distance / maximumDistance) * maximumDelay;
+
+        // Apply the animation with the calculated delay
+        if (this.isOpen) {
+            console.log(`Animating cell #${index} (open)`, { opacity: 0 }, { opacity: 1, delay });
+            this.tl.fromTo(cell, {
+                
+                opacity: 0
+            }, {
+                opacity: 1,
+                delay: delay, // Use the calculated delay here
+            }, 0);
+        } else {
+            console.log(`Animating cell #${index} (close)`, { opacity: 0, delay });
+            this.tl.to(cell, {
+                opacity: 0,
+                delay: delay, // Use the calculated delay here
+            }, 0);
+        }
+    });
+
+    this.animateTooltipContent();
+}
+
 
     /**
      * Specific animation effects applied to the tooltip cells and content

@@ -77,7 +77,7 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
 });
 
 
-// Home – Navigation
+// Home – Navigation – Hover
 // Check if the current page is the homepage
 if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
   $(".navigation").hover(
@@ -107,9 +107,10 @@ $(".scroll-track.is-home_hero").each(function () {
   let targetElement = $(".navigation");
 
   ScrollTrigger.create({
+    markers: true,
     trigger: triggerElement,
-    start: "25% top",
-    end: "25% top",
+    start: "50% top",
+    end: "50% top",
     scrub: 1,
     onEnter: () => {
       targetElement.addClass("is-white");
@@ -354,9 +355,6 @@ function ensureShopPageActive() {
   }
 }
 
-// Call the function to handle Shop page behavior
-ensureShopPageActive();
-
 // About Page Navigation – Hover In/Out 
 function ensureAboutPageActive() {
   if (window.location.pathname.includes("about")) {
@@ -379,9 +377,6 @@ function ensureAboutPageActive() {
     );
   }
 }
-
-// Call the function to handle About page behavior
-ensureAboutPageActive();
 
 // Contact Page Navigation – Hover In/Out 
 function ensureContactPageActive() {
@@ -406,8 +401,6 @@ function ensureContactPageActive() {
   }
 }
 
-// Call the function to handle About page behavior
-ensureContactPageActive();
 
 // Product Page Navigation – Hover In/Out 
 function ensureProductPageActive() {
@@ -432,8 +425,6 @@ function ensureProductPageActive() {
   }
 }
 
-// Call the function to handle About page behavior
-ensureProductPageActive();
 
 // Info Page Navigation – Hover In/Out 
 function ensureInfoPageActive() {
@@ -458,9 +449,6 @@ function ensureInfoPageActive() {
   }
 }
 
-// Call the function to handle About page behavior
-ensureInfoPageActive();
-
 // Terms Page Navigation – Hover In/Out 
 function ensureTermsPageActive() {
   if (window.location.pathname.includes("terms-and-conditions")) {
@@ -484,9 +472,6 @@ function ensureTermsPageActive() {
   }
 }
 
-// Call the function to handle Shop page behavior
-ensureTermsPageActive();
-
 // Privacy Policy Page Navigation – Hover In/Out 
 function ensurePrivacyPageActive() {
   if (window.location.pathname.includes("privacy-policy")) {
@@ -509,9 +494,6 @@ function ensurePrivacyPageActive() {
     );
   }
 }
-
-// Call the function to handle Shop page behavior
-ensurePrivacyPageActive();
 
 // Manage the scroll-triggered .is-active state
 $(".scroll-track.is-home_hero").each(function () {
@@ -775,12 +757,6 @@ pageSecondarySplitText.from(pageSecondarySplit.lines, {
   ease: "power2.out"
 });
 
-
-
-
-
-
-
 // GSAP Split Text
 // Prodcut Page Loader Animation – Description
 const productDescriptionSplitText = gsap.timeline({ paused: true });
@@ -813,7 +789,6 @@ setTimeout(() => {
     element.textContent = element.textContent.replace(/\s/, ''); // Removes the first space only
   });
 }, 2000); // Delay of 2 seconds
-
 
 // Prodcut Page Loader – Tags
 const tags = gsap.utils.toArray(".product-tag-wrap .tag");
@@ -1083,7 +1058,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // GSAP Infinite Marquee
 // Main initialization function
-const init = () => {
+const infiniteMarquee = () => {
   // Select the marquee element using the custom attribute 'fs-data="marquee"'
   const marquee = document.querySelector('[fs-data="marquee"]');
   if (!marquee) {
@@ -1143,12 +1118,8 @@ const init = () => {
     // Set the progress of the new tween to match the previous progress
     tween.progress(progress);
 
-    // Log the width of the marquee content for debugging purposes
-    console.log({ width });
+    // Log the width of the marquee content for debugging purposes console.log({ width });
   };
-
-  // Call the function to start the marquee animation
-  playMarquee();
 
   // Utility function to debounce events (like resize) to prevent excessive calls
   function debounce(func) {
@@ -1181,52 +1152,10 @@ const init = () => {
 };
 
 // Run the initialization function once the DOM content is fully loaded
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", infiniteMarquee);
 
 
-
-/*
-// Remove # from page URL
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if there's a hash in the URL
-    if (window.location.hash) {
-        // Get the target element
-        const targetId = window.location.hash.substring(1);
-        const targetElement = document.getElementById(targetId);
-
-        if (targetElement) {
-            // Scroll to the target element
-            targetElement.scrollIntoView({behavior: 'smooth'});
-
-            // Remove the hash after a short delay (to allow scrolling to complete)
-            setTimeout(function() {
-                history.pushState("", document.title, window.location.pathname + window.location.search);
-            }, 100);
-        }
-    }
-
-    // Add click event listeners to all internal links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-
-            if (targetElement) {
-                targetElement.scrollIntoView({behavior: 'smooth'});
-
-                // Remove the hash after a short delay (to allow scrolling to complete)
-                setTimeout(function() {
-                    history.pushState("", document.title, window.location.pathname + window.location.search);
-                }, 100);
-            }
-        });
-    });
-});
-*/
-
-
+// Info Page – Remove # from sticky nav links
 // when the DOM is ready
 $(document).ready(function() {
   // get the anchor link buttons
@@ -1412,10 +1341,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-// Cart Open – Observer to check open state and play in/out animation
-
-
-
+// Cart Open – Observer to check open state and start/stop lenis
 // Select the target element to observe
 const cartWrapper = document.querySelector('.w-commerce-commercecartwrapper.cart');
 const cartContainer = document.querySelector('.cart-container');
@@ -1477,7 +1403,6 @@ hoverTargets.forEach(target => {
 
 
 // Follow us section animation
-
 // Function to animate the third grid
 const instagramImages = () => {
   const track = document.querySelector('.scroll-track.is-instagram');
@@ -1509,8 +1434,6 @@ const instagramImages = () => {
   }, 0)
 };
 
-instagramImages();
-
 const instagramText = () => {
   const track = document.querySelector('.scroll-track.is-instagram');
   const instagramText = document.querySelectorAll('.instagram-text-wrapper');
@@ -1530,8 +1453,6 @@ const instagramText = () => {
     x: '100%'
   })
 };
-
-instagramText();
 
 // Home – Product Item Reveal On Scroll
 // Select all elements with the class .collection-products-item
@@ -1617,3 +1538,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }, 2000); // Adjust delay as needed (200ms in this example)
 });
+
+// Initialize function
+const initialize = () => {
+  console.log("Initializing application...");
+
+  // Call all the functions here
+  ensureShopPageActive();
+  ensurePrivacyPageActive();
+  ensureTermsPageActive();
+  ensureInfoPageActive();
+  ensureProductPageActive();
+  ensureContactPageActive();
+  ensureAboutPageActive();
+  instagramImages();
+  instagramText();
+
+  console.log("All functions initialized.");
+};
+
+// Call the initialize function
+initialize();

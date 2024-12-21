@@ -1,5 +1,5 @@
 // Importing the Tooltip class from the tooltip.js file to be used for creating tooltip instances.
-import { Tooltip } from 'https://cdn.jsdelivr.net/gh/justin-corbett/facil-swim@v2.3/tooltip.js';
+import { Tooltip } from './tooltip.js';
 
 // Selecting all elements with the class 'trigger' which will activate tooltips on mouse events.
 const triggers = document.querySelectorAll('.trigger');
@@ -34,6 +34,8 @@ triggers.forEach((trigger, index) => {
         showTimeout = setTimeout(() => {
             if (useTouchEvents) event.preventDefault();
             const touchEvent = useTouchEvents ? event.touches[0] : event;
+
+            console.log('Start event fired:', { trigger, effect: trigger.dataset.effect });
 
             if (!tooltip.isOpen) {
                 tooltip.updatePosition(touchEvent);
