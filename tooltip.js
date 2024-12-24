@@ -190,25 +190,54 @@ export class Tooltip {
         });
     }
 
-    /**
-     * Animates the content of the tooltip, including title and description.
-     */
-    animateTooltipContent() {
-        this.tl.fromTo([this.DOM.contentTitle, this.DOM.contentDescription], {
-            opacity: this.isOpen ? 0 : 1
-        }, {
-            duration: 0.2,
-            opacity: this.isOpen ? 1 : 0,
-            stagger: this.isOpen ? 0.2 : 0
-        }, this.isOpen ? 0.4 : 0)
+/**
+ * Animates the content of the tooltip, including title and description.
+ */
+animateTooltipContent() {
+    // Clear any existing SplitText instances to prevent caching issues
+    if (this.splitTooltipTitle) this.splitTooltipTitle.revert();
+    if (this.splitTooltipDescription) this.splitTooltipDescription.revert();
 
-        .add(() => {
-            this.DOM.contentTitle.classList[this.isOpen ? 'add' : 'remove']('glitch');
-        }, this.isOpen ? 0.8 : 0)
-        .add(() => {
-            this.DOM.contentDescription.classList[this.isOpen ? 'add' : 'remove']('glitch');
-        }, this.isOpen ? 1 : 0)
+    // Initialize new SplitText instances for title and description
+    this.splitTooltipTitle = new SplitText(this.DOM.contentTitle, { type: "words" }); // Split the title into words for animation
+    this.splitTooltipDescription = new SplitText(this.DOM.contentDescription, { type: "lines" }); // Split the description into lines for animation
+
+    // Create animation timeline
+    if (this.isOpen) {
+        this.tl = gsap.timeline();
+        this.tl.fromTo(
+            [this.splitTooltipTitle.words, this.splitTooltipDescription.lines],
+            {
+                autoAlpha: 0,
+                y: "100%",
+            },
+            {
+                autoAlpha: 1,
+                y: "0%",
+                duration: 1,
+                stagger: 0.1,
+                ease: "power2.out",
+                delay: 0.3,
+            },
+            0
+        );
+    } else {
+        this.tl = gsap.timeline();
+        this.tl.to(
+            [this.splitTooltipTitle.words, this.splitTooltipDescription.lines],
+            {
+                autoAlpha: 0,
+                y: "100%",
+                duration: 0.2,
+                ease: "power2.out",
+            },
+            0
+        );
     }
+}
+
+
+
 
     /**
  * Specific animation effects applied to the tooltip cells and content
@@ -232,7 +261,7 @@ animateEffect1(event) {
     console.log('Maximum distance:', maximumDistance);
 
     // Define the maximum delay you want to apply to any cell
-    const maximumDelay = 1.8;
+    const maximumDelay = 10;
 
     // Calculate the delay for each cell based on its distance from the mouse position
     this.DOM.cells.forEach((cell, index) => { // Add 'index' here

@@ -107,7 +107,6 @@ $(".scroll-track.is-home_hero").each(function () {
   let targetElement = $(".navigation");
 
   ScrollTrigger.create({
-    markers: true,
     trigger: triggerElement,
     start: "50% top",
     end: "50% top",
@@ -1444,7 +1443,7 @@ const instagramText = () => {
     },
     scrollTrigger: {
       trigger: track,
-      start: 'top 75%',
+      start: 'top center',
       end: 'bottom 25%',
       scrub: 0.2,
     }
@@ -1538,6 +1537,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }, 2000); // Adjust delay as needed (200ms in this example)
 });
+
+// Tooltip – Rotate border infinitely
+document.addEventListener("DOMContentLoaded", () => {
+  // Create the infinite rotation animation for all .tooltip-icon-border elements
+  const tooltipAnimations = gsap.utils.toArray(".tooltip-icon-border").map((element) => {
+      return gsap.to(element, {
+          rotation: 360,
+          duration: 10,
+          repeat: -1,
+          ease: "linear",
+      });
+  });
+
+  // Add hover event listeners to .tooltip-icon-wrap
+  document.querySelectorAll(".tooltip-icon-wrap").forEach((wrap, index) => {
+      wrap.addEventListener("mouseenter", () => {
+          tooltipAnimations[index].pause(); // Pause the animation on hover
+      });
+
+      wrap.addEventListener("mouseleave", () => {
+          tooltipAnimations[index].play(); // Resume the animation on hover out
+      });
+  });
+});
+
+
 
 // Initialize function
 const initialize = () => {
