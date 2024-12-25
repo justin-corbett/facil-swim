@@ -648,7 +648,7 @@ const footerSplitTextTimeline = gsap.timeline({
   },
 });
 
-const footerSplit = new SplitText(".text-footer-logo", { type: "chars" });
+const footerSplit = new SplitText(".text-footer-logo", { type: "chars, words" });
 
 footerSplitTextTimeline.from(footerSplit.chars, {
   duration: 1,
