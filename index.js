@@ -80,24 +80,39 @@ gsap.utils.toArray('.product_item-link').forEach(wrapper => {
 // Home – Navigation – Hover
 // Check if the current page is the homepage
 if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-  $(".navigation").hover(
-    function () {
-      // Add the .is-active class to .navigation and .text-link_line.is-nav on hover
-      $(this).addClass("is-white");
-      $(".text-link_line.is-nav").addClass("is-blue");
-    },
-    function () {
-      // Remove the .is-active class on hover out only if it wasn't already there due to scroll trigger
-      if (!$(this).is(":hover")) {
-        let hasScrollTriggered = $(this).data("scroll-triggered") === true;
-        if (!hasScrollTriggered) {
-          $(this).removeClass("is-white");
-          $(".text-link_line.is-nav").removeClass("is-blue");
+  function applyDesktopHover() {
+    // Check if the screen width is desktop size
+    if ($(window).width() >= 992) {
+      $(".navigation").hover(
+        function () {
+          // Add the .is-active class to .navigation and .text-link_line.is-nav on hover
+          $(this).addClass("is-white");
+          $(".text-link_line.is-nav").addClass("is-blue");
+        },
+        function () {
+          // Remove the .is-active class on hover out only if it wasn't already there due to scroll trigger
+          let hasScrollTriggered = $(this).data("scroll-triggered") === true;
+          if (!hasScrollTriggered) {
+            $(this).removeClass("is-white");
+            $(".text-link_line.is-nav").removeClass("is-blue");
+          }
         }
-      }
+      );
+    } else {
+      // Unbind hover for smaller screen sizes
+      $(".navigation").off("mouseenter mouseleave");
     }
-  );
+  }
+
+  // Initial check
+  applyDesktopHover();
+
+  // Reapply the hover logic on window resize
+  $(window).resize(function () {
+    applyDesktopHover();
+  });
 }
+
 
 
 // Home – Navigation
@@ -1338,40 +1353,6 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 
 
-
-
-// Cart Open – Observer to check open state and start/stop lenis
-// Select the target element to observe
-const cartWrapper = document.querySelector('.w-commerce-commercecartwrapper.cart');
-const cartContainer = document.querySelector('.cart-container');
-
-// Ensure `lenis` is available globally
-if (cartWrapper && cartContainer && typeof lenis !== 'undefined') {
-  // Function to update cart animation and lenis behavior
-  const updateCartBehavior = () => {
-    if (cartWrapper.hasAttribute('data-cart-open')) {
-      // If the attribute is present, animate opacity to 100% and stop Lenis
-      lenis.stop();
-    } else {
-      // If the attribute is not present, animate opacity to 0% and start Lenis
-      lenis.start();
-    }
-  };
-
-  // Create a MutationObserver to observe changes to attributes
-  const observer = new MutationObserver(() => {
-    updateCartBehavior(); // Update behavior on attribute change
-  });
-
-  // Observe the target element for attribute changes
-  observer.observe(cartWrapper, { attributes: true, attributeFilter: ['data-cart-open'] });
-
-  // Initial check to set the correct state
-  updateCartBehavior();
-} else {
-  console.error('One or more elements are missing, or Lenis is not defined.');
-}
-
 // Cart All Pages – Image Hover
 const wrapper = document.querySelector('.cart-empty-img-wrap');
 const image = wrapper.querySelector('.cart-empty-img');
@@ -1398,9 +1379,6 @@ hoverTargets.forEach(target => {
 });
 
 
-
-
-
 // Follow us section animation
 // Function to animate the third grid
 const instagramImages = () => {
@@ -1413,7 +1391,7 @@ const instagramImages = () => {
     },
     scrollTrigger: {
       trigger: track,
-      start: 'top center',
+      start: 'top 75%',
       end: 'bottom center',
       scrub: 1,
     }
@@ -1444,12 +1422,12 @@ const instagramText = () => {
     scrollTrigger: {
       trigger: track,
       start: 'top center',
-      end: 'bottom 25%',
-      scrub: 0.2,
+      end: 'bottom top',
+      scrub: 0,
     }
   })
   .from(instagramText, {
-    x: '100%'
+    x: '80%'
   })
 };
 
@@ -1561,6 +1539,139 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
+// Navigation Mobile – Open Animation
+var mobileMenuOpen = gsap.timeline({ paused: true });
+
+mobileMenuOpen
+  .set('.navigation-bg-wrapper', { display: "block" })
+  .to('.navigation-bg-slide', { 
+    duration: 0.5, 
+    opacity: 1, 
+    y: "0%", 
+    ease: "power2.out" 
+  })
+  .to('.navigation-bg-main', { 
+    duration: 0.5, 
+    opacity: 1, 
+    ease: "power2.out" 
+  }, "-=0.5")
+  .to('.hr-navigation', { 
+    duration: 0.5, 
+    y: "7rem", 
+    ease: "power2.out" 
+  }, "-=0.5")
+  .to('.navigation-bg-title', { 
+    duration: 0.5, 
+    y: "0%", 
+    ease: "power2.out" 
+  }, "-=0.5");
+
+// Navigation Mobile – Open Function
+$(document).ready(function () {
+  if ($(window).width() < 992) {
+    // Function to toggle animations
+    function updateNavMobile() {
+      var navButton = $('.navigation_menu-button.w-nav-button');
+      var navButtonText = $('.nav-mobile-menu-btn-text');
+
+      if (navButton.hasClass('w--open')) {
+        document.querySelector('.nav-logo-link').classList.add('is-mobile_menu-active');
+        document.querySelector('.nav-mobile-menu-btn-text').classList.add('is-active');
+        document.querySelector('.cart-button-open').classList.add('is-active');
+        mobileMenuOpen.play(); // Play open animation
+        lenis.stop();
+        navButtonText.text('Close');
+      } else {
+        document.querySelector('.nav-logo-link').classList.remove('is-mobile_menu-active');
+        document.querySelector('.nav-mobile-menu-btn-text').classList.remove('is-active');
+        document.querySelector('.cart-button-open').classList.remove('is-active');
+        mobileMenuOpen.reverse(); // Reset open animation
+        lenis.start();
+        navButtonText.text('Menu');
+      }
+    }
+
+    // Initial call to update classes
+    updateNavMobile();
+
+    // Observe changes to the navigation button
+    const observer = new MutationObserver(function (mutationsList) {
+      for (let mutation of mutationsList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          updateNavMobile();
+        }
+      }
+    });
+
+    observer.observe(document.querySelector('.navigation_menu-button.w-nav-button'), {
+      attributes: true,
+    });
+  }
+});
+
+// Cart Animation + Observer
+// Cart – Open Animation
+var cartOpen = gsap.timeline({ paused: true });
+
+cartOpen
+  .from('.cart-modal-slide-blue', { 
+    duration: 0.5, 
+    translateX: "100%", 
+    ease: "power2.out" 
+  })
+  .from('.cart-modal-slide-white', { 
+    duration: 0.5,
+    delay: 0.05,
+    translateX: "100%", 
+    ease: "power2.out" 
+  }, "<")
+  .from('.mini-cart-modal_dialog-title', { 
+    duration: 1,
+    opacity: 0, 
+    ease: "power2.out" 
+  }, ">")
+  .from('.mini-cart-modal_form-container', { 
+    duration: 1,
+    opacity: 0, 
+    ease: "power2.out"
+  }, "<");
+
+// Ensure GSAP and its plugins are loaded
+if (typeof gsap !== "undefined") {
+  // Select the element to observe
+  const modalDialog = document.querySelector('.mini-cart-modal_dialog');
+
+  if (modalDialog) {
+    // Observe changes to the 'open' attribute using MutationObserver
+    const observer = new MutationObserver((mutationsList) => {
+      mutationsList.forEach((mutation) => {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'open'
+        ) {
+          if (modalDialog.hasAttribute('open')) {
+            cartOpen.play(); // Play open animation
+            lenis.stop();
+          } else {
+            cartOpen.reverse(); // Reverse the animation
+            lenis.start();
+          }
+        }
+      });
+    });
+
+    // Start observing the modalDialog for attribute changes
+    observer.observe(modalDialog, { attributes: true });
+  } else {
+    console.error('Element with class .mini-cart-modal_dialog not found.');
+  }
+} else {
+  console.error('GSAP is not loaded. Please include GSAP in your project.');
+}
+
+
+
 
 
 
