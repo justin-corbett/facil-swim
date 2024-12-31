@@ -1,0 +1,399 @@
+@keyframes skeleton-loading{
+    0%{
+        background-color:var(--skeleton-loading-start, hsl(200, 20%, 80%))
+    }
+    to{
+        background-color:var(--skeleton-loading-end, hsl(200, 20%, 95%))
+    }
+}
+@keyframes blur-loading{
+    0%{
+        filter:blur(100px)
+    }
+    50%{
+        filter:blur(50px)
+    }
+    to{
+        filter:blur(100px)
+    }
+}
+dialog::backdrop{
+    cursor:pointer
+}
+smootify-product:not(.loaded){
+    position:relative;
+    overflow:hidden;
+    pointer-events:none
+}
+smootify-prop{
+    display:contents
+}
+cart-item.loading>*,cart-item.loading bundle-item>*{
+    position:relative;
+    overflow:hidden;
+    pointer-events:none
+}
+cart-item.loading img,cart-item.loading bundle-item img,smootify-magic-box-cart:not(.loaded) img{
+    animation:blur-loading 5s linear infinite alternate
+}
+cart-item.loading>*:before,cart-item.loading bundle-item>*:before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:10;
+    animation:skeleton-loading 1s linear infinite alternate
+}
+smootify-add-to-cart:has(.cowlendar-btn:not(.cowlendar-hidden)) quantity-input{
+    display:none
+}
+smootify-product:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,.w-dropdown-toggle,[variation],[condition],[option],[product],[metafield],[tagged],[metaobject],[variant-metafield],[customer-metafield]),smootify-variant:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,.w-dropdown-toggle,[variation],[condition],[option],[product],[metafield],[metaobject],[variant-metafield],[customer-metafield]),dynamic-property:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,.w-dropdown-toggle,[variation],[condition],[option],[product],[metafield],[metaobject],[variant-metafield],[customer-metafield]){
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+smootify-metaobject:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,.w-dropdown-toggle,[metaobject]),smootify-magic-box-cart:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,box-item,[box-condition],[data-prop],.w-dropdown-toggle,[metaobject]){
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+smootify-metaobject:not(.loaded) img[metaobject]{
+    animation:blur-loading 5s linear infinite alternate
+}
+dynamic-property:not(.loaded) ::placeholder{
+    color:transparent
+}
+smootify-cart dialog::backdrop{
+    background:var(--smootify-backdrop-color, rgba(0, 0, 0, .8));
+    cursor:pointer
+}
+smootify-cart dialog{
+    max-width:unset;
+    max-height:unset;
+    border:0;
+    padding:0;
+    background-color:transparent
+}
+smootify-product:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,[variation],[condition],[option],[product],.w-tabs,smootify-shop-pay) *,smootify-variant:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,[variation],[condition],[option],[product],.w-tabs,smootify-shop-pay) *,dynamic-property:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,[variation],[condition],[option],[product],[tagged],.w-tabs,smootify-shop-pay) *{
+    opacity:0;
+    border-color:transparent
+}
+smootify-product:not(.loaded) a,smootify-variant:not(.loaded) a{
+    text-decoration:none
+}
+body.has-wishlist [condition=no-items-in-wishlist],body:not(.has-wishlist) [condition=has-items-in-wishlist]{
+    display:none
+}
+:root{
+    --shop-pay-button-width: 100%
+}
+smootify-product.is-available [condition=out-of-stock]:not(smootify-product smootify-product *),smootify-product.is-currently-out-of-stock [condition=not-in-backorder]:not(smootify-product smootify-product *),smootify-product:not(.is-currently-out-of-stock) [condition=in-backorder]:not(smootify-product smootify-product *),smootify-product.is-not-available [condition=in-stock]:not(smootify-product smootify-product *),smootify-product:not(.is-on-sale) [condition=on-sale]:not(smootify-product smootify-product *),smootify-product:not(.last-in-stock) [condition=last-in-stock]:not(smootify-product smootify-product *),smootify-product:not(.low-stock) [condition=low-stock]:not(smootify-product smootify-product *),smootify-product.not-existing-variant [condition=out-of-stock]:not(smootify-product smootify-product *),smootify-product.not-existing-variant [condition=in-stock]:not(smootify-product smootify-product *),smootify-product:not(.not-existing-variant) [condition=disabled]:not(smootify-product smootify-product *),smootify-product:not(.has-subscription) [condition=subscription]:not(smootify-product smootify-product *),smootify-product.has-subscription [condition=no-subscription]:not(smootify-product smootify-product *),smootify-product.is-variable [condition=is-not-variable]:not(smootify-product smootify-product *),smootify-product:not(.is-variable) [condition=is-variable]:not(smootify-product smootify-product *),smootify-product.price-varies [condition=fixed-price]:not(smootify-product smootify-product *),smootify-product:not(.price-varies) [condition=variable-price]:not(smootify-product smootify-product *),smootify-product:not(.is-free) [condition=is-free]:not(smootify-product smootify-product *),smootify-product.is-free [condition=is-paid]:not(smootify-product smootify-product *),smootify-product smootify-product.is-available [condition=out-of-stock],smootify-product smootify-product.is-free [condition=is-paid],smootify-product smootify-product.is-not-available [condition=in-stock],smootify-product smootify-product.is-currently-out-of-stock [condition=not-in-backorder],smootify-product smootify-product:not(.is-currently-out-of-stock) [condition=in-backorder],smootify-product smootify-product:not(.is-on-sale) [condition=on-sale],smootify-product smootify-product:not(.is-free) [condition=is-free],smootify-product smootify-product:not(.last-in-stock) [condition=last-in-stock],smootify-product smootify-product:not(.low-stock) [condition=low-stock],smootify-product smootify-product.not-existing-variant [condition=out-of-stock],smootify-product smootify-product.not-existing-variant [condition=in-stock],smootify-product smootify-product:not(.not-existing-variant) [condition=disabled],smootify-product smootify-product:not(.has-subscription) [condition=subscription],smootify-product smootify-product.has-subscription [condition=no-subscription],smootify-product smootify-product.is-variable [condition=is-not-variable],smootify-product smootify-product:not(.is-variable) [condition=is-variable],smootify-product smootify-product.price-varies [condition=fixed-price],smootify-product smootify-product:not(.price-varies) [condition=variable-price],body:not(.has-complementary) [condition=has-complementary],body:not(.has-related) [condition=has-related]{
+    display:none
+}
+smootify-add-to-cart:not(.is-below-bundle-limits) [condition=below-bundle-limits],smootify-add-to-cart:not(.is-above-bundle-limits) [condition=above-bundle-limits]{
+    display:none
+}
+smootify-product:not(.is-available-at-pickup) store-availability,smootify-product.is-available-at-pickup [condition=not-available-as-local-pickup]{
+    display:none
+}
+store-availability:not(.is-available) [condition=available-at-location],store-availability.is-available [condition=not-available-at-location]{
+    display:none
+}
+smootify-variant.is-available [condition=out-of-stock],smootify-variant.is-not-available [condition=in-stock],smootify-variant:not(.is-on-sale) [condition=on-sale],smootify-variant:not(.last-in-stock) [condition=last-in-stock],smootify-variant:not(.low-stock) [condition=low-stock],smootify-variant.not-existing-variant [condition=out-of-stock],smootify-variant.not-existing-variant [condition=in-stock],smootify-variant:not(.not-existing-variant) [condition=disabled],smootify-variant:not(.has-subscription) [condition=subscription],smootify-variant.has-subscription [condition=no-subscription],smootify-variant.is-variable [condition=is-not-variable],smootify-variant:not(.is-variable) [condition=is-variable],smootify-variant.price-varies [condition=fixed-price],smootify-variant:not(.price-varies) [condition=variable-price]{
+    display:none
+}
+smootify-product:not(.loaded) input::placeholder{
+    opacity:0
+}
+smootify-product:not(.loaded) img:before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:10;
+    animation:skeleton-loading 1s linear infinite alternate
+}
+smootify-product:not(.loaded) img{
+    animation:blur-loading 5s linear infinite alternate
+}
+quantity-input:not(.functionality-type-input) input[type=number]{
+    -moz-appearance:textfield;
+    -webkit-appearance:textfield;
+    appearance:textfield
+}
+quantity-input:not(.functionality-type-input) input[type=number]::-webkit-inner-spin-button,quantity-input:not(.functionality-type-input) input[type=number]::-webkit-outer-spin-button{
+    -webkit-appearance:none;
+    margin:0
+}
+smootify-cart quantity-input input{
+    pointer-events:none
+}
+[data-customer-email-status=not_subscribed] [customer-condition=email-subscribed],[data-customer-email-status=unsubscribed] [customer-condition=email-subscribed],[data-customer-email-status=pending] [customer-condition=email-subscribed],[data-customer-email-status=subscribed] [customer-condition=email-not-subscribed]{
+    display:none
+}
+body:not(.customer-status-loaded) :where([customer-condition],[customer]){
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent;
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent;
+    pointer-events:none
+}
+body:not(.customer-status-loaded) :where([customer-condition],[customer]) *{
+    opacity:0
+}
+body:not(.is-user-logged-in) [customer-condition=logged-in],body.is-user-logged-in [customer-condition=not-logged-in]{
+    display:none
+}
+body:not(.has-customer-names) [customer-condition=has-names],body.has-customer-names [customer-condition=no-names]{
+    display:none
+}
+model-viewer{
+    width:100%;
+    height:100%
+}
+[product=media] video,[product=media] iframe{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border:0
+}
+smootify-search-discovery:not(.empty) [filter=empty-state]{
+    display:none
+}
+:where(filter-list,filter-select,filter-dropdown):not(.loaded) :where(label,select,button,.w-dropdown){
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:4px;
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+country-switcher:not(.loaded) :where(.w-dropdown),location-switcher:not(.loaded) :where(.w-dropdown){
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:4px;
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+country-switcher:not(.loaded) .w-dropdown-toggle,location-switcher:not(.loaded) .w-dropdown-toggle{
+    opacity:0
+}
+customer-orders:not(.loaded) customer-order{
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:4px;
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+customer-orders:not(.loaded) customer-order *{
+    opacity:0
+}
+order-page:not(.loaded) img{
+    animation:blur-loading 5s linear infinite alternate
+}
+order-page:not(.loaded) :where(label,p,h1,h2,h3,h4,h5,h6,button,span,select,input,textarea,.w-dropdown-toggle,[variation],[condition],[option],[order],line-item,fulfillment-item,[product],[metafield],[metaobject],[variant-metafield],[order-condition],[customer-metafield]){
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+.no-fulfillments [order-condition=has-fulfillments]{
+    display:none
+}
+:where(filter-list,filter-select,filter-dropdown):not(.loaded) input{
+    opacity:0
+}
+smootify-search-discovery:not(.inited) :where(filter-list,filter-select,filter-search,filter-swatches,filter-dropdown,[filter],form,button){
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+smootify-search-discovery:not(.inited) button[name]{
+    opacity:0
+}
+smootify-product [variation=image]:not(.loaded){
+    animation:blur-loading 5s linear infinite alternate
+}
+smootify-search-discovery:not(.inited) :where(filter-list,filter-select,filter-search,filter-swatches,filter-dropdown,[filter],form) *>*{
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+smootify-search-discovery:not(.inited) smootify-product img{
+    animation:blur-loading 5s linear infinite alternate
+}
+smootify-search-discovery:not(.inited) :where(input[type=range],input[type=checkbox],input[type=radio],button *){
+    opacity:0
+}
+smootify-search-discovery [data-nav-menu-open]{
+    height:auto!important
+}
+body:has(smootify-search-discovery[body=no-scroll] [data-nav-menu-open]){
+    overflow:hidden
+}
+smootify-product:not(.is-not-available) klaviyo-back-in-stock{
+    display:none!important
+}
+smootify-search-discovery[menu=full-height] [data-nav-menu-open]{
+    height:100dvh!important
+}
+smootify-search-discovery.hide-search filter-search{
+    display:none
+}
+add-to-wishlist:not(.is-inited){
+    visibility:hidden
+}
+.no-zone [address-condition=zone],.has-addresses [customer-condition=no-addresses],.no-addresses [customer-condition=has-addresses],.has-orders [customer-condition=no-orders],.no-orders [customer-condition=has-orders]{
+    display:none
+}
+body:has(.w-nav[is-modal] [data-nav-menu-open]){
+    overflow:hidden
+}
+.w-nav[is-modal]:has([data-nav-menu-open]){
+    z-index:999
+}
+.w-nav[is-modal]:has([data-nav-menu-open]) .w-nav-overlay{
+    position:fixed;
+    width:100%!important;
+    height:100dvh!important;
+    display:flex!important;
+    justify-content:center;
+    align-items:center;
+    background-color:#0000001a;
+    -webkit-backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
+    top:0;
+    z-index:999
+}
+.w-nav[is-modal] [data-nav-menu-open]{
+    height:fit-content!important;
+    position:relative
+}
+[filter=active].preselected-filter{
+    pointer-events:none
+}
+[filter=active].preselected-filter img{
+    display:none
+}
+cart-item.invisible-bundle{
+    display:none
+}
+body:has([is-modal] [data-nav-menu-open]) .w-nav[is-modal]:not(:has([data-nav-menu-open])){
+    z-index:-1!important;
+    visibility:hidden
+}
+store-locator:not(.loaded) :where(store-location>*,input,map,[condition]),[policy]:not(.is-loaded) *{
+    animation:skeleton-loading 1s linear infinite alternate;
+    color:transparent!important;
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent!important;
+    pointer-events:none;
+    text-decoration:none
+}
+store-locator:not(.loaded) store-location{
+    border-radius:var(--skeleton-radius, 4px);
+    border-color:transparent!important
+}
+store-locator:not(.loaded) input::placeholder{
+    color:transparent
+}
+store-locator:not(.loaded) map{
+    animation:blur-loading 5s linear infinite alternate
+}
+smootify-add-to-cart:not(.has-bundles) :where([bundle-limit],[condition=below-bundle-limits],[condition=above-bundle-limits],[bundle]){
+    display:none
+}
+button[is=preferences-button]:not(.is-shown){
+    display:none!important
+}
+smootify-product:not(.loaded) file-uploader>*{
+    opacity:0
+}
+@keyframes dialog-fade-in{
+    0%{
+        opacity:0
+    }
+    to{
+        opacity:1
+    }
+}
+@keyframes dialog-slide-in-right{
+    0%{
+        transform:translate(100%)
+    }
+    to{
+        transform:translate(0)
+    }
+}
+@keyframes dialog-slide-in-top{
+    0%{
+        transform:translateY(-100%)
+    }
+    to{
+        transform:translateY(0)
+    }
+}
+@keyframes dialog-slide-in-bottom{
+    0%{
+        transform:translateY(100%)
+    }
+    to{
+        transform:translateY(0)
+    }
+}
+@keyframes dialog-slide-in-left{
+    0%{
+        transform:translate(-100%)
+    }
+    to{
+        transform:translate(0)
+    }
+}
+@keyframes dialog-scale-in{
+    0%{
+        transform:scale(.95)
+    }
+    to{
+        transform:scale(1)
+    }
+}
+@keyframes dialog-scale-in-fade{
+    0%{
+        transform:scale(.95);
+        opacity:0
+    }
+    to{
+        transform:scale(1);
+        opacity:1
+    }
+}
+@keyframes dialog-scale-out-fade{
+    0%{
+        transform:scale(.95);
+        opacity:0
+    }
+    to{
+        transform:scale(1);
+        opacity:1
+    }
+}
