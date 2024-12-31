@@ -270,7 +270,7 @@ body:has(.w-nav[is-modal] [data-nav-menu-open]){
     overflow:hidden
 }
 .w-nav[is-modal]:has([data-nav-menu-open]){
-    z-index:9999999
+    z-index:999
 }
 .w-nav[is-modal]:has([data-nav-menu-open]) .w-nav-overlay{
     position:fixed;
@@ -283,7 +283,7 @@ body:has(.w-nav[is-modal] [data-nav-menu-open]){
     -webkit-backdrop-filter:blur(4px);
     backdrop-filter:blur(4px);
     top:0;
-    z-index:999999
+    z-index:999
 }
 .w-nav[is-modal] [data-nav-menu-open]{
     height:fit-content!important;
