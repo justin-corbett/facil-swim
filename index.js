@@ -248,6 +248,34 @@ if (window.location.pathname.includes("terms-and-conditions")) {
   });
 }
 
+// 404 – Navigation – Footer scroll into view
+// Add the .is-blue and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname.includes("page-not-found")) {
+  let footerElement = $(".section-instagram");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: footerElement,
+    start: "top bottom",
+    end: "top bottom",
+    scrub: 1,
+    onEnter: () => {
+      navigationElement.addClass("is-green");
+      navLineElement.addClass("is-light_blue");
+      navigationElement.removeClass("is-grey");
+      navLineElement.removeClass("is-blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-green");
+      navLineElement.removeClass("is-light_blue");
+      navigationElement.addClass("is-grey");
+      navLineElement.addClass("is-blue");
+    },
+  });
+}
+
 // Privacy Policy – Navigation – Footer scroll into view
 // Add the .is-blue and .is-light_blue classes when .footer scrolls into view
 // Check if the current page is the homepage
@@ -489,6 +517,29 @@ function ensureTermsPageActive() {
 // Privacy Policy Page Navigation – Hover In/Out 
 function ensurePrivacyPageActive() {
   if (window.location.pathname.includes("privacy-policy")) {
+    // Add 'is-white' class to the navigation
+    $(".navigation").addClass("is-grey");
+    
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).addClass("is-blue");
+    });
+
+    // Handle hover state for .navigation
+    $(".navigation").hover(
+      function () {
+        // Do nothing on hover out
+      },
+      function () {
+        // Do nothing on hover out
+      }
+    );
+  }
+}
+
+// 404 Page Navigation – Hover In/Out 
+function ensure404PageActive() {
+  if (window.location.pathname.includes("page-not-found")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-grey");
     
@@ -1615,27 +1666,98 @@ $(document).ready(function () {
 var cartOpen = gsap.timeline({ paused: true });
 
 cartOpen
-  .from('.cart-modal-slide-blue', { 
+  .from('.mini-cart-modal-bg_backdrop', { 
     duration: 0.5, 
-    translateX: "100%", 
-    ease: "power2.out" 
+    opacity: 0, 
+    ease: "power3.inOut" 
   })
   .from('.cart-modal-slide-white', { 
     duration: 0.5,
-    delay: 0.05,
     translateX: "100%", 
-    ease: "power2.out" 
+    ease: "power3.inOut" 
   }, "<")
   .from('.mini-cart-modal_dialog-title', { 
-    duration: 1,
+    duration: 0.5,
     opacity: 0, 
-    ease: "power2.out" 
+    ease: "power3.inOut" 
   }, ">")
   .from('.mini-cart-modal_form-container', { 
-    duration: 1,
+    duration: 0.5,
+    delay: 0.1,
     opacity: 0, 
-    ease: "power2.out"
+    ease: "power3.inOut"
   }, "<");
+
+// Cart – Close Animation
+var cartClose = gsap.timeline({
+  paused: true,
+  onComplete: () => {
+    // Reset the position of the elements
+    gsap.set(['.mini-cart-modal_dialog-title', '.mini-cart-modal_form-container'], { translateX: "0%" });
+  }
+});
+
+cartClose
+  .to('.mini-cart-modal-bg_backdrop', { 
+    duration: 0.5, 
+    opacity: 0, 
+    ease: "power3.inOut" 
+  })
+  .to('.cart-modal-slide-white', { 
+    duration: 0.5,
+    translateX: "100%", 
+    ease: "power3.inOut" 
+  }, "<")
+  .to('.mini-cart-modal_dialog-title', { 
+    duration: 0.5,
+    translateX: "100%", 
+    opacity: 0, 
+    ease: "power3.inOut" 
+  }, "<")
+  .to('.mini-cart-modal_form-container', { 
+    duration: 0.5,
+    translateX: "100%", 
+    opacity: 0, 
+    ease: "power3.inOut"
+  }, "<");
+
+/*
+// Cart – Open Animation
+var cartTransition = gsap.timeline({ paused: true });
+
+cartTransition
+  .to('.cart-page-transition', { 
+    y: "0%",
+    duration: 0.5,
+    ease: "power2.inOut",
+  });
+
+  // Select the checkout button
+const checkoutButton = document.querySelector('.button.is-checkout');
+
+// Add a click event listener
+checkoutButton.addEventListener('click', () => {
+  // Play the cart open animation
+  cartTransition.play();
+});
+*/
+
+// Select the close button and the backdrop
+const closeButton = document.querySelector('.mini-cart-modal_close-button');
+const modalBackdrop = document.querySelector('.mini-cart-modal-bg_backdrop');
+
+// Add click event listener for the close button
+closeButton.addEventListener('click', () => {
+  // Play the cart close animation
+  cartClose.restart();
+});
+
+// Add click event listener for the backdrop (for the "backdrop" behavior)
+modalBackdrop.addEventListener('click', () => {
+  // Play the cart close animation
+  cartClose.restart();
+});
+
 
 // Ensure GSAP and its plugins are loaded
 if (typeof gsap !== "undefined") {
@@ -1651,10 +1773,10 @@ if (typeof gsap !== "undefined") {
           mutation.attributeName === 'open'
         ) {
           if (modalDialog.hasAttribute('open')) {
-            cartOpen.play(); // Play open animation
+            cartOpen.restart(); // Restart the animation from the beginning
             lenis.stop();
           } else {
-            cartOpen.reverse(); // Reverse the animation
+            cartOpen.pause(0); // Reset the animation to the initial state
             lenis.start();
           }
         }
@@ -1675,6 +1797,7 @@ if (typeof gsap !== "undefined") {
 
 
 
+
 // Initialize function
 const initialize = () => {
   console.log("Initializing application...");
@@ -1689,6 +1812,7 @@ const initialize = () => {
   ensureAboutPageActive();
   instagramImages();
   instagramText();
+  ensure404PageActive();
 
   console.log("All functions initialized.");
 };
