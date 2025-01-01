@@ -2,44 +2,44 @@
 // GSAP timeline function for click event
 function pageTransition(destination) {
   gsap.to(".page-transition", {
-      y: "0%",
-      duration: 0.5, // Optional duration
-      ease: "power2.inOut",
-      onComplete: () => {
-          window.location = destination;
-      },
+    y: "0%",
+    duration: 0.5, // Optional duration
+    ease: "power2.inOut",
+    onComplete: () => {
+      window.location = destination;
+    },
   });
 }
 
 // Page Transition
 // Code for click event
-  $(document).on("click", "a", function (e) {
-    if (
-      $(this).prop("hostname") === window.location.host &&
-      $(this).attr("href").indexOf("#") === -1 &&
-      $(this).attr("target") !== "_blank"
-    ) {
-      e.preventDefault();
-      let destination = $(this).attr("href");
+$(document).on("click", "a", function (e) {
+  if (
+    $(this).prop("hostname") === window.location.host &&
+    $(this).attr("href").indexOf("#") === -1 &&
+    $(this).attr("target") !== "_blank"
+  ) {
+    e.preventDefault();
+    let destination = $(this).attr("href");
 
-      // Call loaderOnLinkClick when a link is clicked
-      pageTransition (destination);
-    }
-  });
+    // Call loaderOnLinkClick when a link is clicked
+    pageTransition(destination);
+  }
+});
 
 // Page Transition
 // On click of the back button
-  window.onpageshow = function (event) {
-    if (event.persisted) {
-      window.location.reload();
-    }
+window.onpageshow = function (event) {
+  if (event.persisted) {
+    window.location.reload();
   }
+}
 
 // Show/hide grid w/ Shift + G
-$(document). keydown (function (e) {
-	if (e. shiftKey && e. key === "G") {
-		$(".grid-wrap").toggleClass("hide");
-	}
+$(document).keydown(function (e) {
+  if (e.shiftKey && e.key === "G") {
+    $(".grid-wrap").toggleClass("hide");
+  }
 });
 
 // All Pages – Product List
@@ -47,30 +47,30 @@ $(document). keydown (function (e) {
 gsap.utils.toArray('.product_item-link').forEach(wrapper => {
   // On hover
   wrapper.addEventListener('mouseenter', () => {
-    gsap.to(wrapper.querySelector('.product_image'), { 
-      opacity: 0, 
-      duration: 0.5, 
+    gsap.to(wrapper.querySelector('.product_image'), {
+      opacity: 0,
+      duration: 0.5,
       ease: ""
     });
 
-    gsap.to(wrapper.querySelector('.product_image-hover'), { 
-      scale: 1, 
-      duration: 0.5, 
+    gsap.to(wrapper.querySelector('.product_image-hover'), {
+      scale: 1,
+      duration: 0.5,
       ease: ""
     });
   });
 
   // On hover out
   wrapper.addEventListener('mouseleave', () => {
-    gsap.to(wrapper.querySelector('.product_image'), { 
-      opacity: 1, 
-      duration: 0.5, 
+    gsap.to(wrapper.querySelector('.product_image'), {
+      opacity: 1,
+      duration: 0.5,
       ease: ""
     });
 
-    gsap.to(wrapper.querySelector('.product_image-hover'), { 
-      scale: 1.1, 
-      duration: 0.5, 
+    gsap.to(wrapper.querySelector('.product_image-hover'), {
+      scale: 1.1,
+      duration: 0.5,
       ease: ""
     });
   });
@@ -179,7 +179,7 @@ if (window.location.pathname.includes("shop")) {
     end: "top bottom",
     scrub: 1,
     onEnter: () => {
-      
+
       navLineElement.removeClass("is-blue");
       navigationElement.removeClass("is-blue");
       navigationElement.addClass("is-blue");
@@ -364,14 +364,14 @@ $(".scroll-track.is-home_hero").each(function (index) {
   tl.to(imageCenter, {
     y: "-15vh",
     duration: 1,
-  }, "<"); 
+  }, "<");
 
   // Animate the center image
   tl.to(heroContent, {
     y: "-30vh",
     filter: "blur(5px)",
     duration: 1,
-  }, "<"); 
+  }, "<");
 });
 
 // Shop Page Navigation – Hover In/Out 
@@ -379,7 +379,7 @@ function ensureShopPageActive() {
   if (window.location.pathname.includes("shop")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-white");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-blue");
@@ -402,7 +402,7 @@ function ensureAboutPageActive() {
   if (window.location.pathname.includes("about")) {
     // Add 'is-blue' class to the navigation
     $(".navigation").addClass("is-blue");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-light_blue");
@@ -425,7 +425,7 @@ function ensureContactPageActive() {
   if (window.location.pathname.includes("contact")) {
     // Add 'is-blue' class to the navigation
     $(".navigation").addClass("is-green");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-light_blue");
@@ -449,7 +449,7 @@ function ensureProductPageActive() {
   if (window.location.pathname.includes("product")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-white");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-blue");
@@ -473,7 +473,7 @@ function ensureInfoPageActive() {
   if (window.location.pathname.includes("info")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-green");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-light_blue");
@@ -496,7 +496,7 @@ function ensureTermsPageActive() {
   if (window.location.pathname.includes("terms-and-conditions")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-grey");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-blue");
@@ -519,7 +519,7 @@ function ensurePrivacyPageActive() {
   if (window.location.pathname.includes("privacy-policy")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-grey");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-blue");
@@ -542,7 +542,7 @@ function ensure404PageActive() {
   if (window.location.pathname.includes("page-not-found")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-grey");
-    
+
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
       $(this).addClass("is-blue");
@@ -604,9 +604,9 @@ $(".horizontal-rule").each(function (index, element) {
 });
 
 // Scroll to top on page refresh
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const scrollTopButton = document.querySelector('.scroll-top');
-  
+
   if (scrollTopButton) {
     const clickEvent = new Event('click');
     scrollTopButton.dispatchEvent(clickEvent);
@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // Footer back to top botton
-document.querySelector('.text-link.is-back_to_top').addEventListener('click', function() {
+document.querySelector('.text-link.is-back_to_top').addEventListener('click', function () {
   lenis.scrollTo('#top');
 });
 
@@ -630,7 +630,7 @@ let initialWidth = window.innerWidth;
 function shouldRefresh(newWidth) {
   for (let breakpoint of breakpoints) {
     if ((initialWidth <= breakpoint && newWidth > breakpoint) ||
-        (initialWidth > breakpoint && newWidth <= breakpoint)) {
+      (initialWidth > breakpoint && newWidth <= breakpoint)) {
       return true;
     }
   }
@@ -675,13 +675,13 @@ $(".btn_wrap").each(function (index, btnWrap) {
 
 
 // Product Page + - Buttons
-$('.input-plus').click(function() {
+$('.input-plus').click(function () {
   var $input = $(this).parents('.quantity-wrap').find('.input-number');
   var val = parseInt($input.val(), 10);
   $input.val(val + 1);
 });
 
-$('.input-minus').click(function() {
+$('.input-minus').click(function () {
   var $input = $(this).parents('.quantity-wrap').find('.input-number');
   var val = parseInt($input.val(), 10);
   $input.val(Math.max(val - 1, 1));
@@ -953,8 +953,7 @@ const observer = new MutationObserver((mutations) => {
       if (hadCurrentOrAlternate !== hasCurrentOrAlternate) {
         // Log the change for debugging
         console.log(
-          `.w--current or .is-alternate ${
-            hasCurrentOrAlternate ? "added" : "removed"
+          `.w--current or .is-alternate ${hasCurrentOrAlternate ? "added" : "removed"
           } on element:`,
           mutation.target
         );
@@ -1034,20 +1033,20 @@ document.querySelectorAll('.radio_field').forEach(component => {
 });
 
 // Contact Page – Auto Select Field General Enquiry
-window.onload = function() {
+window.onload = function () {
   if (window.location.pathname.includes("contact")) {
-      setTimeout(() => {
-          const select = document.getElementById("configure-select");
-          if (select) {
-              select.selectedIndex = 0; // Ensure first option is selected
+    setTimeout(() => {
+      const select = document.getElementById("configure-select");
+      if (select) {
+        select.selectedIndex = 0; // Ensure first option is selected
 
-              // Trigger the change event
-              const changeEvent = new Event("change");
-              select.dispatchEvent(changeEvent);
-          } else {
-              console.error("Element with id 'configure-select' not found.");
-          }
-      }, 1000);
+        // Trigger the change event
+        const changeEvent = new Event("change");
+        select.dispatchEvent(changeEvent);
+      } else {
+        console.error("Element with id 'configure-select' not found.");
+      }
+    }, 1000);
   }
 };
 
@@ -1059,7 +1058,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
       // Find all elements inside the form with the class 'text-button'
       const textButtons = form.querySelectorAll('.text-button');
-      
+
       // Update the text content of each '.text-button' element
       textButtons.forEach(button => {
         button.textContent = 'Please wait...';
@@ -1082,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
       // Find all elements inside the form with the class 'text-button'
       const textButtons = form.querySelectorAll('.text-button');
-      
+
       // Update the text content of each '.text-button' element
       textButtons.forEach(button => {
         button.textContent = 'Subscribing...';
@@ -1105,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
       // Find all elements inside the form with the class 'text-button'
       const textButtons = form.querySelectorAll('.text-button');
-      
+
       // Update the text content of each '.text-button' element
       textButtons.forEach(button => {
         button.textContent = 'Adding...';
@@ -1222,14 +1221,14 @@ document.addEventListener("DOMContentLoaded", infiniteMarquee);
 
 // Info Page – Remove # from sticky nav links
 // when the DOM is ready
-$(document).ready(function() {
+$(document).ready(function () {
   // get the anchor link buttons
   const menuBtn = $('.text-link.is-info-sticky_nav');
   // when each button is clicked
-  menuBtn.click(()=>{	
+  menuBtn.click(() => {
     // set a short timeout before taking action
     // so as to allow hash to be set
-    setTimeout(()=>{
+    setTimeout(() => {
       // call removeHash function after set timeout
       removeHash();
     }, 1); // 5 millisecond timeout in this case
@@ -1237,7 +1236,7 @@ $(document).ready(function() {
 
   // removeHash function
   // uses HTML5 history API to manipulate the location bar
-  function removeHash(){
+  function removeHash() {
     history.replaceState('', document.title, window.location.origin + window.location.pathname + window.location.search);
   }
 });
@@ -1246,8 +1245,8 @@ $(document).ready(function() {
 function updateFooterHeight() {
   const nav = document.querySelector('.navigation'); // Replace '.navigation' with the actual class or ID of your navigation
   if (nav) {
-      const navHeight = nav.offsetHeight; // Get the current height of the navigation
-      document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
+    const navHeight = nav.offsetHeight; // Get the current height of the navigation
+    document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
   }
 }
 
@@ -1320,87 +1319,87 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Webflow section link – add height to top of screen
-  // Disable Webflow's built-in smooth scrolling
-  var Webflow = Webflow || [];
-  Webflow.push(function() {
-    $(function() { 
-      $(document).off('click.wf-scroll');
-    });
+// Disable Webflow's built-in smooth scrolling
+var Webflow = Webflow || [];
+Webflow.push(function () {
+  $(function () {
+    $(document).off('click.wf-scroll');
   });
+});
 
-  // Smooth scroll implementation with customizable settings
-  (function() {
-    // Customizable settings
-    const SCROLL_SETTINGS = {
-      duration: 1000, // in milliseconds
-      easing: 'easeInOutCubic' // 'linear', 'easeInQuad', 'easeOutQuad', 'easeInOutQuad', 'easeInCubic', 'easeOutCubic', 'easeInOutCubic'
-    };
+// Smooth scroll implementation with customizable settings
+(function () {
+  // Customizable settings
+  const SCROLL_SETTINGS = {
+    duration: 1000, // in milliseconds
+    easing: 'easeInOutCubic' // 'linear', 'easeInQuad', 'easeOutQuad', 'easeInOutQuad', 'easeInCubic', 'easeOutCubic', 'easeInOutCubic'
+  };
 
-    const EASING_FUNCTIONS = {
-      linear: t => t,
-      easeInQuad: t => t * t,
-      easeOutQuad: t => t * (2 - t),
-      easeInOutQuad: t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
-      easeInCubic: t => t * t * t,
-      easeOutCubic: t => (--t) * t * t + 1,
-      easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-    };
+  const EASING_FUNCTIONS = {
+    linear: t => t,
+    easeInQuad: t => t * t,
+    easeOutQuad: t => t * (2 - t),
+    easeInOutQuad: t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+    easeInCubic: t => t * t * t,
+    easeOutCubic: t => (--t) * t * t + 1,
+    easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+  };
 
-    function getOffset() {
-      const navbar = document.querySelector('.navigation');
-      if (!navbar) return 0;
-      const navbarHeight = navbar.offsetHeight;
-      const customOffset = parseInt(navbar.getAttribute('.navigation') || '64', 10);
-      return navbarHeight + customOffset;
+  function getOffset() {
+    const navbar = document.querySelector('.navigation');
+    if (!navbar) return 0;
+    const navbarHeight = navbar.offsetHeight;
+    const customOffset = parseInt(navbar.getAttribute('.navigation') || '64', 10);
+    return navbarHeight + customOffset;
+  }
+
+  function smoothScroll(target) {
+    const startPosition = window.pageYOffset;
+    const offset = getOffset();
+    const targetPosition = target.getBoundingClientRect().top + startPosition - offset;
+    const distance = targetPosition - startPosition;
+    let startTime = null;
+
+    function animation(currentTime) {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / SCROLL_SETTINGS.duration, 1);
+      const easeProgress = EASING_FUNCTIONS[SCROLL_SETTINGS.easing](progress);
+      window.scrollTo(0, startPosition + distance * easeProgress);
+      if (timeElapsed < SCROLL_SETTINGS.duration) requestAnimationFrame(animation);
     }
 
-    function smoothScroll(target) {
-      const startPosition = window.pageYOffset;
-      const offset = getOffset();
-      const targetPosition = target.getBoundingClientRect().top + startPosition - offset;
-      const distance = targetPosition - startPosition;
-      let startTime = null;
+    requestAnimationFrame(animation);
+  }
 
-      function animation(currentTime) {
-        if (startTime === null) startTime = currentTime;
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / SCROLL_SETTINGS.duration, 1);
-        const easeProgress = EASING_FUNCTIONS[SCROLL_SETTINGS.easing](progress);
-        window.scrollTo(0, startPosition + distance * easeProgress);
-        if (timeElapsed < SCROLL_SETTINGS.duration) requestAnimationFrame(animation);
+  function handleClick(e) {
+    const href = e.currentTarget.getAttribute('href');
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.getElementById(href.slice(1));
+      if (target) smoothScroll(target);
+    }
+  }
+
+  function handleHashChange() {
+    if (window.location.hash) {
+      const target = document.getElementById(window.location.hash.slice(1));
+      if (target) {
+        setTimeout(() => smoothScroll(target), 0);
       }
-
-      requestAnimationFrame(animation);
     }
+  }
 
-    function handleClick(e) {
-      const href = e.currentTarget.getAttribute('href');
-      if (href.startsWith('#')) {
-        e.preventDefault();
-        const target = document.getElementById(href.slice(1));
-        if (target) smoothScroll(target);
-      }
-    }
+  function init() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', handleClick);
+    });
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Handle initial hash on page load
+  }
 
-    function handleHashChange() {
-      if (window.location.hash) {
-        const target = document.getElementById(window.location.hash.slice(1));
-        if (target) {
-          setTimeout(() => smoothScroll(target), 0);
-        }
-      }
-    }
-
-    function init() {
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', handleClick);
-      });
-      window.addEventListener('hashchange', handleHashChange);
-      handleHashChange(); // Handle initial hash on page load
-    }
-
-    document.addEventListener('DOMContentLoaded', init);
-    window.Webflow && window.Webflow.push(init);
+  document.addEventListener('DOMContentLoaded', init);
+  window.Webflow && window.Webflow.push(init);
 })();
 
 
@@ -1412,18 +1411,18 @@ const hoverTargets = [wrapper, document.querySelector('.text-link.is-alternate.i
 hoverTargets.forEach(target => {
   // On hover
   target.addEventListener('mouseenter', () => {
-    gsap.to(image, { 
-      scale: 1, 
-      duration: 0.5, 
+    gsap.to(image, {
+      scale: 1,
+      duration: 0.5,
       ease: "power2.out" // Add a smooth ease
     });
   });
 
   // On hover out
   target.addEventListener('mouseleave', () => {
-    gsap.to(image, { 
-      scale: 1.1, 
-      duration: 0.5, 
+    gsap.to(image, {
+      scale: 1.1,
+      duration: 0.5,
       ease: "power2.out" // Add a smooth ease
     });
   });
@@ -1447,19 +1446,19 @@ const instagramImages = () => {
       scrub: 1,
     }
   })
-  .from(instagramImages, {
-    stagger: 0.06,
-    y: window.innerHeight,
-    rotation: (index) => index % 2 === 0 ? -15 : 15,
-    transformOrigin: '50% 0%'
-  })
-  .fromTo(instagramImages, {
-    filter: 'brightness(100%)'
-  }, {
-    ease: 'none',
-    stagger: 0.06,
-    filter: pos => pos < instagramImages.length-1 ? 'brightness(20%)' : 'brightness(100%)'
-  }, 0)
+    .from(instagramImages, {
+      stagger: 0.06,
+      y: window.innerHeight,
+      rotation: (index) => index % 2 === 0 ? -15 : 15,
+      transformOrigin: '50% 0%'
+    })
+    .fromTo(instagramImages, {
+      filter: 'brightness(100%)'
+    }, {
+      ease: 'none',
+      stagger: 0.06,
+      filter: pos => pos < instagramImages.length - 1 ? 'brightness(20%)' : 'brightness(100%)'
+    }, 0)
 };
 
 const instagramText = () => {
@@ -1477,9 +1476,9 @@ const instagramText = () => {
       scrub: 0,
     }
   })
-  .from(instagramText, {
-    x: '80%'
-  })
+    .from(instagramText, {
+      x: '80%'
+    })
 };
 
 // Home – Product Item Reveal On Scroll
@@ -1491,14 +1490,14 @@ collectionItems.forEach((item, index) => {
   gsap.from(item.querySelector(".product_image-wrapper"), {
     translateY: "50%",
     autoAlpha: 0,
-    duration: 1,        
-    ease: "power3.out", 
+    duration: 1,
+    ease: "power3.out",
     delay: (index % 3) * 0.1, // Stagger items within each row (adjust the 3 for your row size)
     scrollTrigger: {
-      trigger: item,      
-      start: "top bottom", 
-      end: "bottom top",   
-      toggleActions: "play none none reset", 
+      trigger: item,
+      start: "top bottom",
+      end: "bottom top",
+      toggleActions: "play none none reset",
     },
   });
 });
@@ -1571,23 +1570,23 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   // Create the infinite rotation animation for all .tooltip-icon-border elements
   const tooltipAnimations = gsap.utils.toArray(".tooltip-icon-border").map((element) => {
-      return gsap.to(element, {
-          rotation: 360,
-          duration: 10,
-          repeat: -1,
-          ease: "linear",
-      });
+    return gsap.to(element, {
+      rotation: 360,
+      duration: 10,
+      repeat: -1,
+      ease: "linear",
+    });
   });
 
   // Add hover event listeners to .tooltip-icon-wrap
   document.querySelectorAll(".tooltip-icon-wrap").forEach((wrap, index) => {
-      wrap.addEventListener("mouseenter", () => {
-          tooltipAnimations[index].pause(); // Pause the animation on hover
-      });
+    wrap.addEventListener("mouseenter", () => {
+      tooltipAnimations[index].pause(); // Pause the animation on hover
+    });
 
-      wrap.addEventListener("mouseleave", () => {
-          tooltipAnimations[index].play(); // Resume the animation on hover out
-      });
+    wrap.addEventListener("mouseleave", () => {
+      tooltipAnimations[index].play(); // Resume the animation on hover out
+    });
   });
 });
 
@@ -1596,26 +1595,26 @@ var mobileMenuOpen = gsap.timeline({ paused: true });
 
 mobileMenuOpen
   .set('.navigation-bg-wrapper', { display: "block" })
-  .to('.navigation-bg-slide', { 
-    duration: 0.5, 
-    opacity: 1, 
-    y: "0%", 
-    ease: "power2.out" 
+  .to('.navigation-bg-slide', {
+    duration: 0.5,
+    opacity: 1,
+    y: "0%",
+    ease: "power2.out"
   })
-  .to('.navigation-bg-main', { 
-    duration: 0.5, 
-    opacity: 1, 
-    ease: "power2.out" 
+  .to('.navigation-bg-main', {
+    duration: 0.5,
+    opacity: 1,
+    ease: "power2.out"
   }, "-=0.5")
-  .to('.hr-navigation', { 
-    duration: 0.5, 
-    y: "7rem", 
-    ease: "power2.out" 
+  .to('.hr-navigation', {
+    duration: 0.5,
+    y: "7rem",
+    ease: "power2.out"
   }, "-=0.5")
-  .to('.navigation-bg-title', { 
-    duration: 0.5, 
-    y: "0%", 
-    ease: "power2.out" 
+  .to('.navigation-bg-title', {
+    duration: 0.5,
+    y: "0%",
+    ease: "power2.out"
   }, "-=0.5");
 
 // Navigation Mobile – Open Function
@@ -1666,25 +1665,25 @@ $(document).ready(function () {
 var cartOpen = gsap.timeline({ paused: true });
 
 cartOpen
-  .from('.mini-cart-modal-bg_backdrop', { 
-    duration: 0.5, 
-    opacity: 0, 
-    ease: "power3.inOut" 
+  .from('.mini-cart-modal-bg_backdrop', {
+    duration: 0.5,
+    opacity: 0,
+    ease: "power3.inOut"
   })
-  .from('.cart-modal-slide-white', { 
+  .from('.cart-modal-slide-white', {
     duration: 0.5,
-    translateX: "100%", 
-    ease: "power3.inOut" 
+    translateX: "100%",
+    ease: "power3.inOut"
   }, "<")
-  .from('.mini-cart-modal_dialog-title', { 
+  .from('.mini-cart-modal_dialog-title', {
     duration: 0.5,
-    opacity: 0, 
-    ease: "power3.inOut" 
+    opacity: 0,
+    ease: "power3.inOut"
   }, ">")
-  .from('.mini-cart-modal_form-container', { 
+  .from('.mini-cart-modal_form-container', {
     duration: 0.5,
     delay: 0.1,
-    opacity: 0, 
+    opacity: 0,
     ease: "power3.inOut"
   }, "<");
 
@@ -1698,30 +1697,30 @@ var cartClose = gsap.timeline({
 });
 
 cartClose
-  .to('.mini-cart-modal-bg_backdrop', { 
-    duration: 0.5, 
-    opacity: 0, 
-    ease: "power3.inOut" 
+  .to('.mini-cart-modal-bg_backdrop', {
+    duration: 0.5,
+    opacity: 0,
+    ease: "power3.inOut"
   })
-  .to('.cart-modal-slide-white', { 
+  .to('.cart-modal-slide-white', {
     duration: 0.5,
-    translateX: "100%", 
-    ease: "power3.inOut" 
+    translateX: "100%",
+    ease: "power3.inOut"
   }, "<")
-  .to('.mini-cart-modal_dialog-title', { 
+  .to('.mini-cart-modal_dialog-title', {
     duration: 0.5,
-    translateX: "100%", 
-    opacity: 0, 
-    ease: "power3.inOut" 
+    translateX: "100%",
+    opacity: 0,
+    ease: "power3.inOut"
   }, "<")
-  .to('.mini-cart-modal_form-container', { 
+  .to('.mini-cart-modal_form-container', {
     duration: 0.5,
-    translateX: "100%", 
-    opacity: 0, 
+    translateX: "100%",
+    opacity: 0,
     ease: "power3.inOut"
   }, "<");
 
-/*
+
 // Cart – Open Animation
 var cartTransition = gsap.timeline({ paused: true });
 
@@ -1740,7 +1739,7 @@ checkoutButton.addEventListener('click', () => {
   // Play the cart open animation
   cartTransition.play();
 });
-*/
+
 
 // Select the close button and the backdrop
 const closeButton = document.querySelector('.mini-cart-modal_close-button');
