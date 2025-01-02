@@ -1243,12 +1243,19 @@ $(document).ready(function () {
 
 // All pages – Footer calc height minus nav height
 function updateFooterHeight() {
-  const nav = document.querySelector('.navigation'); // Replace '.navigation' with the actual class or ID of your navigation
-  if (nav) {
-    const navHeight = nav.offsetHeight; // Get the current height of the navigation
-    document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
+  if (window.innerWidth <= 767) { // Trigger only on devices 767px or below
+    const nav = document.querySelector('.navigation'); // Replace '.navigation' with the actual class or ID of your navigation
+    if (nav) {
+      const navHeight = nav.offsetHeight; // Get the current height of the navigation
+      document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
+    }
   }
 }
+
+// Call the function on page load and window resize
+window.addEventListener('load', updateFooterHeight);
+window.addEventListener('resize', updateFooterHeight);
+
 
 // Observe changes to the navigation size
 const nav = document.querySelector('.navigation');
