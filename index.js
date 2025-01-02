@@ -1595,27 +1595,60 @@ var mobileMenuOpen = gsap.timeline({ paused: true });
 
 mobileMenuOpen
   .set('.navigation-bg-wrapper', { display: "block" })
-  .to('.navigation-bg-slide', {
+  .from('.navigation-bg-slide', {
     duration: 0.5,
-    opacity: 1,
-    y: "0%",
-    ease: "power2.out"
+    y: "-100%",
+    ease: "power2.inOut"
   })
-  .to('.navigation-bg-main', {
+  .from('.navigation-bg-backdrop', {
     duration: 0.5,
-    opacity: 1,
-    ease: "power2.out"
-  }, "-=0.5")
+    opacity: 0,
+    ease: "power2.inOut"
+  }, "<")
   .to('.hr-navigation', {
     duration: 0.5,
-    y: "7rem",
+    width: "100%",
     ease: "power2.out"
-  }, "-=0.5")
-  .to('.navigation-bg-title', {
+  }, ">")
+  .from('.text-nav-mobile-sub_heading', {
     duration: 0.5,
-    y: "0%",
+    delay: 0.5,
+    opacity: 0,
     ease: "power2.out"
-  }, "-=0.5");
+  }, ">")
+  .from('.mobile-links_instagram-wrap', {
+    duration: 0.5,
+    opacity: 0,
+    ease: "power2.out"
+  }, "<")
+
+// Navigation Text Primary – Animation
+var mobileMenuLinksPrimaryAnimation = gsap.timeline({ paused: true });
+
+// Animate all matching elements inside the parent wrapper
+mobileMenuLinksPrimaryAnimation
+  .from('.mobile-links_primary-wrap .text-link.is-nav-mobile_primary', {
+    opacity: 0,
+    y: "50%",
+    delay: 0.5,
+    duration: 0.5, // Animation duration for each element
+    ease: "power2.out", // Easing function
+    stagger: 0.1 // Stagger delay between each element
+  });
+
+  // Navigation Text Secondary – Animation
+var mobileMenuLinksSecondaryAnimation = gsap.timeline({ paused: true });
+
+// Animate all matching elements inside the parent wrapper
+mobileMenuLinksSecondaryAnimation
+  .from('.mobile-links_secondary-wrap .text-link.is-nav-mobile_secondary', {
+    opacity: 0,
+    delay: 1.2,
+    duration: 0.5, // Animation duration for each element
+    ease: "power2.Out", // Easing function
+    stagger: 0.05 // Stagger delay between each element
+  });
+
 
 // Navigation Mobile – Open Function
 $(document).ready(function () {
@@ -1624,23 +1657,51 @@ $(document).ready(function () {
     function updateNavMobile() {
       var navButton = $('.navigation_menu-button.w-nav-button');
       var navButtonText = $('.nav-mobile-menu-btn-text');
-
+  
       if (navButton.hasClass('w--open')) {
-        document.querySelector('.nav-logo-link').classList.add('is-mobile_menu-active');
-        document.querySelector('.nav-mobile-menu-btn-text').classList.add('is-active');
-        document.querySelector('.cart-button-open').classList.add('is-active');
-        mobileMenuOpen.play(); // Play open animation
-        lenis.stop();
-        navButtonText.text('Close');
+          // Add classes with delay
+          setTimeout(() => {
+              document.querySelector('.nav-logo-link')?.classList.add('is-mobile_menu-active');
+          }, 100); // 100ms delay
+  
+          setTimeout(() => {
+              document.querySelector('.nav-mobile-menu-btn-text')?.classList.add('is-active');
+          }, 100); // 200ms delay
+  
+          setTimeout(() => {
+              document.querySelector('.mini-cart-modal_button')?.classList.add('is-active');
+          }, 100); // 300ms delay
+  
+          // Play animation immediately
+          mobileMenuOpen.play();
+          mobileMenuLinksPrimaryAnimation.play();
+          mobileMenuLinksSecondaryAnimation.play();
+          lenis.stop();
+          navButtonText.text('Close');
       } else {
-        document.querySelector('.nav-logo-link').classList.remove('is-mobile_menu-active');
-        document.querySelector('.nav-mobile-menu-btn-text').classList.remove('is-active');
-        document.querySelector('.cart-button-open').classList.remove('is-active');
-        mobileMenuOpen.reverse(); // Reset open animation
-        lenis.start();
-        navButtonText.text('Menu');
+          // Remove classes with delay
+          setTimeout(() => {
+              document.querySelector('.nav-logo-link')?.classList.remove('is-mobile_menu-active');
+          }, 1800); // 100ms delay
+  
+          setTimeout(() => {
+              document.querySelector('.nav-mobile-menu-btn-text')?.classList.remove('is-active');
+          }, 1800); // 200ms delay
+  
+          setTimeout(() => {
+              document.querySelector('.mini-cart-modal_button')?.classList.remove('is-active');
+          }, 1800); // 300ms delay
+  
+          // Reverse animation immediately
+          mobileMenuOpen.reverse();
+          mobileMenuLinksPrimaryAnimation.reverse();
+          mobileMenuLinksSecondaryAnimation.reverse();
+          lenis.start();
+          navButtonText.text('Menu');
       }
-    }
+  }
+  
+  
 
     // Initial call to update classes
     updateNavMobile();
