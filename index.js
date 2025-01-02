@@ -1243,7 +1243,7 @@ $(document).ready(function () {
 
 // All pages – Footer calc height minus nav height
 function updateFooterHeight() {
-  if (window.innerWidth <= 767) { // Trigger only on devices 767px or below
+  if (window.innerWidth > 767) { // Trigger only on devices 767px or below
     const nav = document.querySelector('.navigation'); // Replace '.navigation' with the actual class or ID of your navigation
     if (nav) {
       const navHeight = nav.offsetHeight; // Get the current height of the navigation
