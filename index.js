@@ -1770,37 +1770,34 @@ $(document).ready(function () {
 });
 
 // Size Guide Modal – Open
-var sizeGuideModalOpen = gsap.timeline({ paused: true });
+document.addEventListener('DOMContentLoaded', () => {
+  // GSAP Timelines
+  var sizeGuideModalOpen = gsap.timeline({ paused: true });
+  sizeGuideModalOpen
+    .set('.size_guide-modal-wrap', { display: "block" })
+    .from('.modal_background-overlay', {
+      duration: 0.5,
+      opacity: 0,
+      ease: "power3.inOut"
+    })
+    .from('.modal_content-wrapper', {
+      duration: 0.5,
+      translateX: "100%",
+      ease: "power3.inOut"
+    }, "<")
+    .from('.size_guide-modal-header', {
+      duration: 0.5,
+      opacity: 0,
+      ease: "power1.inOut"
+    }, "-=0.2")
+    .from('.size_guide-modal-content', {
+      duration: 0.5,
+      delay: 0.1,
+      opacity: 0,
+      ease: "power1.inOut"
+    }, "<");
 
-sizeGuideModalOpen
-  .set('.size_guide-modal-wrap', {
-    display: "block",
-  })
-  .from('.modal_background-overlay', {
-    duration: 0.5,
-    opacity: 0,
-    ease: "power3.inOut"
-  })
-  .from('.modal_content-wrapper', {
-    duration: 0.5,
-    translateX: "100%",
-    ease: "power3.inOut"
-  }, "<")
-  .from('.size_guide-modal-header', {
-    duration: 0.5,
-    opacity: 0,
-    ease: "power1.inOut"
-  }, "-=0.2")
-  .from('.size_guide-modal-content', {
-    duration: 0.5,
-    delay: 0.1,
-    opacity: 0,
-    ease: "power1.inOut"
-  }, "<");
-
-  // Size Guide Modal – Close
   var sizeGuideModalClose = gsap.timeline({ paused: true });
-
   sizeGuideModalClose
     .to('.modal_background-overlay', {
       duration: 0.5,
@@ -1823,33 +1820,38 @@ sizeGuideModalOpen
       ease: "power1.inOut"
     }, "<")
     .add(() => {
-      // Set display: "none" after the animation completes
       gsap.set('.size_guide-modal-wrap', { display: "none" });
     });
-  
 
-// Select the modal open button, close button and the backdrop
-const sizeGuideModalCloseButton = document.querySelector('.size_guide-modal_close-button');
-const sizeGuideModalBackdrop = document.querySelector('.modal_background-overlay');
-const sizeGuideModalOpenButtons = document.querySelectorAll('.size_guide-modal-open');
+  // Modal Elements
+  const sizeGuideModalCloseButton = document.querySelector('.size_guide-modal_close-button');
+  const sizeGuideModalBackdrop = document.querySelector('.modal_background-overlay');
+  const sizeGuideModalOpenButtons = document.querySelectorAll('.size_guide-modal-open');
 
-sizeGuideModalOpenButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    sizeGuideModalOpen.restart();
-  });
+  // Open Button Event Listeners
+  if (sizeGuideModalOpenButtons.length > 0) {
+    sizeGuideModalOpenButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        sizeGuideModalOpen.restart();
+      });
+    });
+  }
+
+  // Close Button Event Listener
+  if (sizeGuideModalCloseButton) {
+    sizeGuideModalCloseButton.addEventListener('click', () => {
+      sizeGuideModalClose.restart();
+    });
+  }
+
+  // Backdrop Click Event Listener
+  if (sizeGuideModalBackdrop) {
+    sizeGuideModalBackdrop.addEventListener('click', () => {
+      sizeGuideModalClose.restart();
+    });
+  }
 });
 
-// Add click event listener for the size guide modal close button
-sizeGuideModalCloseButton.addEventListener('click', () => {
-  // Play the cart close animation
-  sizeGuideModalClose.restart();
-});
-
-// Add click event listener for the size guide backdrop
-sizeGuideModalBackdrop.addEventListener('click', () => {
-  // Play the cart close animation
-  sizeGuideModalClose.restart();
-});
 
 // Cart Animation + Observer
 // Cart – Open Animation
