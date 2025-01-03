@@ -1183,7 +1183,7 @@ const infiniteMarquee = () => {
   if (!marquee) return;
 
   const defaultDuration = parseInt(marquee.getAttribute("duration"), 50) || 50;
-  const mobileDuration = 20; // Set your desired duration for mobile
+  const mobileDuration = 30; // Set your desired duration for mobile
 
   const marqueeContent = marquee.firstElementChild; // Corrected: Use `firstElementChild` instead of `firstChild`
   if (!marqueeContent) return;
@@ -1769,6 +1769,88 @@ $(document).ready(function () {
   }
 });
 
+// Size Guide Modal – Open
+var sizeGuideModalOpen = gsap.timeline({ paused: true });
+
+sizeGuideModalOpen
+  .set('.size_guide-modal-wrap', {
+    display: "block",
+  })
+  .from('.modal_background-overlay', {
+    duration: 0.5,
+    opacity: 0,
+    ease: "power3.inOut"
+  })
+  .from('.modal_content-wrapper', {
+    duration: 0.5,
+    translateX: "100%",
+    ease: "power3.inOut"
+  }, "<")
+  .from('.size_guide-modal-header', {
+    duration: 0.5,
+    opacity: 0,
+    ease: "power1.inOut"
+  }, "-=0.2")
+  .from('.size_guide-modal-content', {
+    duration: 0.5,
+    delay: 0.1,
+    opacity: 0,
+    ease: "power1.inOut"
+  }, "<");
+
+  // Size Guide Modal – Close
+  var sizeGuideModalClose = gsap.timeline({ paused: true });
+
+  sizeGuideModalClose
+    .to('.modal_background-overlay', {
+      duration: 0.5,
+      opacity: 0,
+      ease: "power3.inOut"
+    })
+    .to('.modal_content-wrapper', {
+      duration: 0.5,
+      translateX: "100%",
+      ease: "power3.inOut"
+    }, "<")
+    .to('.size_guide-modal-header', {
+      duration: 0.5,
+      opacity: 0,
+      ease: "power1.inOut"
+    }, "-=0.2")
+    .to('.size_guide-modal-content', {
+      duration: 0.5,
+      opacity: 0,
+      ease: "power1.inOut"
+    }, "<")
+    .add(() => {
+      // Set display: "none" after the animation completes
+      gsap.set('.size_guide-modal-wrap', { display: "none" });
+    });
+  
+
+// Select the modal open button, close button and the backdrop
+const sizeGuideModalCloseButton = document.querySelector('.size_guide-modal_close-button');
+const sizeGuideModalBackdrop = document.querySelector('.modal_background-overlay');
+const sizeGuideModalOpenButtons = document.querySelectorAll('.size_guide-modal-open');
+
+sizeGuideModalOpenButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    sizeGuideModalOpen.restart();
+  });
+});
+
+// Add click event listener for the size guide modal close button
+sizeGuideModalCloseButton.addEventListener('click', () => {
+  // Play the cart close animation
+  sizeGuideModalClose.restart();
+});
+
+// Add click event listener for the size guide backdrop
+sizeGuideModalBackdrop.addEventListener('click', () => {
+  // Play the cart close animation
+  sizeGuideModalClose.restart();
+});
+
 // Cart Animation + Observer
 // Cart – Open Animation
 var cartOpen = gsap.timeline({ paused: true });
@@ -1787,13 +1869,13 @@ cartOpen
   .from('.mini-cart-modal_dialog-title', {
     duration: 0.5,
     opacity: 0,
-    ease: "power3.inOut"
-  }, ">")
+    ease: "power1.inOut"
+  }, "-=0.2")
   .from('.mini-cart-modal_form-container', {
     duration: 0.5,
     delay: 0.1,
     opacity: 0,
-    ease: "power3.inOut"
+    ease: "power1.inOut"
   }, "<");
 
 // Cart – Close Animation
@@ -1830,7 +1912,7 @@ cartClose
   }, "<");
 
 
-// Cart – Open Animation
+// Cart – Page Transition Animation
 var cartTransition = gsap.timeline({ paused: true });
 
 cartTransition
