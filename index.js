@@ -236,7 +236,7 @@ if (window.location.pathname.includes("terms-and-conditions")) {
     onEnter: () => {
       navigationElement.addClass("is-blue");
       navLineElement.addClass("is-light_blue");
-      navigationElement.removeClass("is-blue");
+      navigationElement.removeClass("is-grey");
       navLineElement.removeClass("is-blue");
     },
     onLeaveBack: () => {
@@ -292,6 +292,36 @@ if (window.location.pathname.includes("privacy-policy")) {
     onEnter: () => {
       navigationElement.addClass("is-blue");
       navLineElement.addClass("is-light_blue");
+      navigationElement.removeClass("is-grey");
+      navLineElement.removeClass("is-blue");
+    },
+    onLeaveBack: () => {
+      navigationElement.removeClass("is-blue");
+      navLineElement.removeClass("is-light_blue");
+      navigationElement.addClass("is-grey");
+      navLineElement.addClass("is-blue");
+    },
+  });
+}
+
+// Returns Policy – Navigation – Footer scroll into view
+// Add the .is-blue and .is-light_blue classes when .footer scrolls into view
+// Check if the current page is the homepage
+if (window.location.pathname.includes("returns-policy")) {
+  let footerElement = $(".section-instagram");
+  let navigationElement = $(".navigation");
+  let navLineElement = $(".text-link_line.is-nav");
+
+  ScrollTrigger.create({
+    trigger: footerElement,
+    start: "top bottom",
+    end: "top bottom",
+    scrub: 1,
+    onEnter: () => {
+      navigationElement.addClass("is-blue");
+      navLineElement.addClass("is-light_blue");
+      navigationElement.removeClass("is-grey");
+      navLineElement.removeClass("is-blue");
     },
     onLeaveBack: () => {
       navigationElement.removeClass("is-blue");
@@ -379,6 +409,29 @@ function ensureShopPageActive() {
   if (window.location.pathname.includes("shop")) {
     // Add 'is-white' class to the navigation
     $(".navigation").addClass("is-white");
+
+    // Update background color for each .text-link_line.is-nav
+    $(".text-link_line.is-nav").each(function () {
+      $(this).addClass("is-blue");
+    });
+
+    // Handle hover state for .navigation
+    $(".navigation").hover(
+      function () {
+        // Do nothing on hover out
+      },
+      function () {
+        // Do nothing on hover out
+      }
+    );
+  }
+}
+
+// Returns Page Navigation – Hover In/Out 
+function ensureReturnsPageActive() {
+  if (window.location.pathname.includes("returns-policy")) {
+    // Add 'is-white' class to the navigation
+    $(".navigation").addClass("is-grey");
 
     // Update background color for each .text-link_line.is-nav
     $(".text-link_line.is-nav").each(function () {
@@ -615,8 +668,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Footer back to top botton
 document.querySelector('.text-link.is-back_to_top').addEventListener('click', function () {
-  lenis.scrollTo('#top');
+  lenis.scrollTo('#top', {
+    duration: 2.5, // Duration in seconds (e.g., 2 seconds for a slower animation)
+  });
 });
+
 
 
 // Page refresh on resize
@@ -1123,100 +1179,59 @@ document.addEventListener('DOMContentLoaded', function () {
 // GSAP Infinite Marquee
 // Main initialization function
 const infiniteMarquee = () => {
-  // Select the marquee element using the custom attribute 'fs-data="marquee"'
   const marquee = document.querySelector('[fs-data="marquee"]');
-  if (!marquee) {
-    // Exit if the marquee element is not found
-    return;
-  }
+  if (!marquee) return;
 
-  // Get the duration attribute from the marquee or default to 20 seconds
-  const duration = parseInt(marquee.getAttribute("duration"), 10) || 20;
+  const defaultDuration = parseInt(marquee.getAttribute("duration"), 50) || 50;
+  const mobileDuration = 20; // Set your desired duration for mobile
 
-  // Get the first child of the marquee (assumed to be the marquee content)
-  const marqueeContent = marquee.firstChild;
-  if (!marqueeContent) {
-    // Exit if the marquee content is not found
-    return;
-  }
+  const marqueeContent = marquee.firstElementChild; // Corrected: Use `firstElementChild` instead of `firstChild`
+  if (!marqueeContent) return;
 
-  // Clone the marquee content to create the looping effect
   const marqueeContentClone = marqueeContent.cloneNode(true);
-  marquee.append(marqueeContentClone); // Append the cloned content to the marquee
+  marquee.append(marqueeContentClone);
 
-  let tween; // Placeholder for the GSAP tween animation
+  let tween;
 
-  // Function to initialize and play the marquee animation
   const playMarquee = () => {
-    // Skip initialization if the marquee or its parent is hidden
     if (getComputedStyle(marquee).display === 'none') return;
 
-    // If a tween already exists, get its current progress
     let progress = tween ? tween.progress() : 0;
+    if (tween) {
+      tween.progress(0).kill(); // Reset and kill the existing tween safely
+    }
 
-    // Kill the existing tween and reset progress to avoid duplicate animations
-    tween && tween.progress(0).kill();
-
-    // Calculate the width of the marquee content
-    const width = parseInt(
-      getComputedStyle(marqueeContent).getPropertyValue("width"),
-      10
-    );
-
-    // Calculate the gap between columns (if defined in CSS)
+    const width = marqueeContent.offsetWidth; // Use `offsetWidth` for better accuracy
     const gap = parseInt(
       getComputedStyle(marqueeContent).getPropertyValue("column-gap"),
       10
-    );
+    ) || 0; // Default gap to 0 if not specified
 
-    // Calculate the total distance to translate (negative for leftward scrolling)
     const distanceToTranslate = -1 * (gap + width);
 
-    // Create a GSAP tween animation for the marquee
+    // Check viewport width and set duration accordingly
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const duration = isMobile ? mobileDuration : defaultDuration;
+
     tween = gsap.fromTo(
-      marquee.children, // Target all children of the marquee (original and clone)
-      { x: 0 }, // Start at x: 0 (no translation)
-      { x: distanceToTranslate, duration, ease: "none", repeat: -1 } // Translate left with infinite repeat
+      marquee.children,
+      { x: 0 },
+      { x: distanceToTranslate, duration, ease: "none", repeat: -1 }
     );
 
-    // Set the progress of the new tween to match the previous progress
     tween.progress(progress);
-
-    // Log the width of the marquee content for debugging purposes console.log({ width });
   };
 
-  // Utility function to debounce events (like resize) to prevent excessive calls
-  function debounce(func) {
-    var timer;
-    return function (event) {
-      if (timer) clearTimeout(timer); // Clear existing timer
-      timer = setTimeout(
-        () => {
-          func(); // Call the debounced function
-        },
-        500, // Delay in milliseconds
-        event
-      );
-    };
-  }
+  // Listen for window resize events to adjust the marquee duration dynamically
+  window.addEventListener("resize", playMarquee);
 
-  // Attach a debounced resize event listener to restart the animation on resize
-  window.addEventListener("resize", debounce(playMarquee));
-
-  // Watch for changes in visibility of the banner-wrap or its parents
-  const bannerWrap = marquee.closest('.banner-wrap');
-  const observer = new MutationObserver(() => {
-    if (getComputedStyle(bannerWrap).display !== 'none') {
-      playMarquee(); // Recalculate and play the marquee when it becomes visible
-    }
-  });
-
-  // Observe visibility changes on the banner-wrap element
-  observer.observe(bannerWrap, { attributes: true, childList: false, subtree: false });
+  // Initial play
+  playMarquee();
 };
 
-// Run the initialization function once the DOM content is fully loaded
-document.addEventListener("DOMContentLoaded", infiniteMarquee);
+// Call the function to initialize the marquee
+infiniteMarquee();
+
 
 
 // Info Page – Remove # from sticky nav links
@@ -1488,26 +1503,52 @@ const instagramText = () => {
     })
 };
 
-// Home – Product Item Reveal On Scroll
-// Select all elements with the class .collection-products-item
-const collectionItems = Array.from(document.querySelectorAll(".collection-products-item"));
+// Products List Items – Reveal on scroll – Desktop
+gsap.matchMedia().add("(min-width: 992px)", () => {
+  // Select all elements with the class .collection-products-item
+  const collectionItems = Array.from(document.querySelectorAll(".collection-products-item"));
 
-// Loop through each item and apply the animation
-collectionItems.forEach((item, index) => {
-  gsap.from(item.querySelector(".product_image-wrapper"), {
-    translateY: "50%",
-    autoAlpha: 0,
-    duration: 1,
-    ease: "power3.out",
-    delay: (index % 3) * 0.1, // Stagger items within each row (adjust the 3 for your row size)
-    scrollTrigger: {
-      trigger: item,
-      start: "top bottom",
-      end: "bottom top",
-      toggleActions: "play none none reset",
-    },
+  // Loop through each item and apply the animation
+  collectionItems.forEach((item, index) => {
+    gsap.from(item.querySelector(".product_image-wrapper"), {
+      translateY: "50%",
+      autoAlpha: 0,
+      duration: 1,
+      ease: "power3.out",
+      delay: (index % 3) * 0.1, // Stagger items within each row (adjust the 3 for your row size)
+      scrollTrigger: {
+        trigger: item,
+        start: "top bottom",
+        end: "bottom top",
+        toggleActions: "play none none reset",
+      },
+    });
   });
 });
+
+// Products List Items – Reveal on scroll – Mobile
+gsap.matchMedia().add("(max-width: 991px)", () => {
+  // Select all elements with the class .collection-products-item
+  const collectionItems = Array.from(document.querySelectorAll(".collection-products-item"));
+
+  // Loop through each item and apply the animation
+  collectionItems.forEach((item, index) => {
+    gsap.from(item.querySelector(".product_image-wrapper"), {
+      translateY: "50%",
+      autoAlpha: 0,
+      duration: 1,
+      ease: "power3.out",
+      delay: (index % 2) * 0.1, // Stagger items within each row (adjust the 3 for your row size)
+      scrollTrigger: {
+        trigger: item,
+        start: "top bottom",
+        end: "bottom top",
+        toggleActions: "play none none reset",
+      },
+    });
+  });
+});
+
 
 // All Pages – GSAP Split Text – Words
 // Select all elements with the `data-split-words` attribute
@@ -1880,6 +1921,7 @@ const initialize = () => {
   instagramImages();
   instagramText();
   ensure404PageActive();
+  ensureReturnsPageActive();
 
   console.log("All functions initialized.");
 };

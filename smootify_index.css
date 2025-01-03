@@ -1,9 +1,9 @@
 @keyframes skeleton-loading{
     0%{
-        background-color:var(--skeleton-loading-start, #EAF2F7)
+        background-color:var(--skeleton-loading-start, #f7f7f7)
     }
     to{
-        background-color:var(--skeleton-loading-end, #FBFDFE)
+        background-color:var(--skeleton-loading-end, #D4D4D4)
     }
 }
 @keyframes blur-loading{
