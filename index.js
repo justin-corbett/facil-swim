@@ -838,7 +838,7 @@ productDescriptionSplitText.from(productDescriptionSplit.lines, {
 // GSAP Split Text
 // Product Page Loader Animation – Title
 const productTitleSplitText = gsap.timeline({ paused: true });
-const productTitleSplit = new SplitText("#product-title", { type: "chars" });
+const productTitleSplit = new SplitText("#product-title", { type: "chars, words" });
 
 productTitleSplitText.from(productTitleSplit.chars, {
   duration: 0.5,
