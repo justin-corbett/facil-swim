@@ -1161,7 +1161,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const marquee = document.querySelector('[fs-data="marquee"]');
       if (!marquee) return;
 
-      const defaultDuration = parseInt(marquee.getAttribute("duration"), 10) || 50;
+      const defaultDuration = parseInt(marquee.getAttribute("duration"), 50) || 50;
       const mobileDuration = 30; // Set your desired duration for mobile
 
       const marqueeContent = marquee.firstElementChild; // Corrected: Use `firstElementChild` instead of `firstChild`
@@ -1212,10 +1212,6 @@ document.addEventListener("DOMContentLoaded", () => {
     infiniteMarquee();
   }, 2000); // Delay of 2000ms (2 seconds)
 });
-
-
-
-
 
 // Info Page – Remove # from sticky nav links
 // when the DOM is ready
