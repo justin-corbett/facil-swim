@@ -1177,60 +1177,63 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // GSAP Infinite Marquee
-// Main initialization function
-const infiniteMarquee = () => {
-  const marquee = document.querySelector('[fs-data="marquee"]');
-  if (!marquee) return;
+document.addEventListener("DOMContentLoaded", () => {
+  // GSAP Infinite Marquee
+  const infiniteMarquee = () => {
+    const marquee = document.querySelector('[fs-data="marquee"]');
+    if (!marquee) return;
 
-  const defaultDuration = parseInt(marquee.getAttribute("duration"), 50) || 50;
-  const mobileDuration = 30; // Set your desired duration for mobile
+    const defaultDuration = parseInt(marquee.getAttribute("duration"), 10) || 50;
+    const mobileDuration = 30; // Set your desired duration for mobile
 
-  const marqueeContent = marquee.firstElementChild; // Corrected: Use `firstElementChild` instead of `firstChild`
-  if (!marqueeContent) return;
+    const marqueeContent = marquee.firstElementChild; // Corrected: Use `firstElementChild` instead of `firstChild`
+    if (!marqueeContent) return;
 
-  const marqueeContentClone = marqueeContent.cloneNode(true);
-  marquee.append(marqueeContentClone);
+    const marqueeContentClone = marqueeContent.cloneNode(true);
+    marquee.append(marqueeContentClone);
 
-  let tween;
+    let tween;
 
-  const playMarquee = () => {
-    if (getComputedStyle(marquee).display === 'none') return;
+    const playMarquee = () => {
+      if (getComputedStyle(marquee).display === 'none') return;
 
-    let progress = tween ? tween.progress() : 0;
-    if (tween) {
-      tween.progress(0).kill(); // Reset and kill the existing tween safely
-    }
+      let progress = tween ? tween.progress() : 0;
+      if (tween) {
+        tween.progress(0).kill(); // Reset and kill the existing tween safely
+      }
 
-    const width = marqueeContent.offsetWidth; // Use `offsetWidth` for better accuracy
-    const gap = parseInt(
-      getComputedStyle(marqueeContent).getPropertyValue("column-gap"),
-      10
-    ) || 0; // Default gap to 0 if not specified
+      const width = marqueeContent.offsetWidth; // Use `offsetWidth` for better accuracy
+      const gap = parseInt(
+        getComputedStyle(marqueeContent).getPropertyValue("column-gap"),
+        10
+      ) || 0; // Default gap to 0 if not specified
 
-    const distanceToTranslate = -1 * (gap + width);
+      const distanceToTranslate = -1 * (gap + width);
 
-    // Check viewport width and set duration accordingly
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const duration = isMobile ? mobileDuration : defaultDuration;
+      // Check viewport width and set duration accordingly
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      const duration = isMobile ? mobileDuration : defaultDuration;
 
-    tween = gsap.fromTo(
-      marquee.children,
-      { x: 0 },
-      { x: distanceToTranslate, duration, ease: "none", repeat: -1 }
-    );
+      tween = gsap.fromTo(
+        marquee.children,
+        { x: 0 },
+        { x: distanceToTranslate, duration, ease: "none", repeat: -1 }
+      );
 
-    tween.progress(progress);
+      tween.progress(progress);
+    };
+
+    // Listen for window resize events to adjust the marquee duration dynamically
+    window.addEventListener("resize", playMarquee);
+
+    // Initial play
+    playMarquee();
   };
 
-  // Listen for window resize events to adjust the marquee duration dynamically
-  window.addEventListener("resize", playMarquee);
+  // Call the function to initialize the marquee
+  infiniteMarquee();
+});
 
-  // Initial play
-  playMarquee();
-};
-
-// Call the function to initialize the marquee
-infiniteMarquee();
 
 
 
