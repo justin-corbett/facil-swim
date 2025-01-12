@@ -1905,9 +1905,24 @@ cartTransition
 
   // Select the checkout button
 const checkoutButton = document.querySelector('.button.is-checkout');
+const cartEmptyImage = document.querySelector('.cart-empty-img-wrap');
+const cartEmptyLink = document.querySelector('.text-link.is-alternate.is-serif.is-cart_empty');
+
 
 // Add a click event listener
 checkoutButton.addEventListener('click', () => {
+  // Play the cart open animation
+  cartTransition.play();
+});
+
+// Add a click event listener
+cartEmptyImage.addEventListener('click', () => {
+  // Play the cart open animation
+  cartTransition.play();
+});
+
+// Add a click event listener
+cartEmptyLink.addEventListener('click', () => {
   // Play the cart open animation
   cartTransition.play();
 });
