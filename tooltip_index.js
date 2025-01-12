@@ -1,9 +1,8 @@
 // Importing the Tooltip class from the tooltip.js file to be used for creating tooltip instances.
-import { Tooltip } from 'https://cdn.jsdelivr.net/gh/justin-corbett/facil-swim@v2.4/tooltip.js';
-
+import { Tooltip } from 'https://cdn.jsdelivr.net/gh/justin-corbett/facil-swim@v2.5/tooltip.js';
 
 // Selecting all elements with the class 'trigger' which will activate tooltips on mouse events.
-const triggers = document.querySelectorAll('.trigger');
+const triggers = document.querySelectorAll('.tooltip-icon-wrap');
 
 // Helper function to determine if the device supports touch events
 const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;

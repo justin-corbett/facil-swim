@@ -163,7 +163,7 @@ export class Tooltip {
      * @param {string} [options.ease='expo'] - Easing function for the animation.
      * @returns {GSAPTimeline} The GSAP timeline object for animations.
      */
-    createDefaultTimeline({ duration = 0.3, ease = 'expo' } = {}) {
+    createDefaultTimeline({ duration = 0.3, ease = 'power2.out' } = {}) {
         if ( this.tl ) { 
             this.tl.kill();
         }
@@ -491,6 +491,33 @@ animateEffect1(event) {
                     from: 'random',
                     grid: 'auto'
                 }
+            }, 0);
+        }
+
+        this.animateTooltipContent();
+
+    }
+
+    /**
+     * Specific animation effects applied to the tooltip cells and content
+     */
+    animateEffect7() {
+
+        this.tl = this.createDefaultTimeline();
+
+        if ( this.isOpen ) {
+            this.tl.fromTo(this.DOM.bg, {
+                opacity: 0,
+                y: "25%",
+            }, {
+                opacity: 1,
+                y: "0%",
+            }, 0);
+        }
+        else {
+            this.tl.to(this.DOM.bg, {
+                opacity: 0,
+                y: "25%",
             }, 0);
         }
 
