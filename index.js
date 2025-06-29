@@ -1978,10 +1978,16 @@ if (typeof gsap !== "undefined") {
   console.error('GSAP is not loaded. Please include GSAP in your project.');
 }
 
-
-
-
-
+// Video Play Text Infinite Horizontal Scroll
+gsap.to(".cursor-video_play-text", {
+  duration: 5,
+  ease: "none",
+  x: "+=500", //move each box 500px to right
+  modifiers: {
+    x: gsap.utils.unitize(x => parseFloat(x) % 500) //force x value to be between 0 and 500 using modulus
+  },
+  repeat: -1
+}); 
 
 
 // Initialize function
@@ -2006,3 +2012,4 @@ const initialize = () => {
 
 // Call the initialize function
 initialize();
+
